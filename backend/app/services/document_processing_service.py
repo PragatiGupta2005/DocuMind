@@ -1,27 +1,33 @@
-import os
+from pathlib import Path
 
-from app.processors.pdf_processor import PDFProcessor
+from app.exceptions.document_exceptions import (
+    UnsupportedDocumentTypeError,
+)
+
+from app.processors.processor_factory import ProcessorFactory
 from app.schemas.document_schema import DocumentSchema
 
 
 class DocumentProcessingService:
     """
-    Selects the correct processor
-    based on the uploaded document type.
+    Coordinates document processing.
     """
 
-    def __init__(self):
+    def process_document(
+        self,
+        file_path: str
+    ) -> DocumentSchema:
 
-        self.pdf_processor = PDFProcessor()
+        extension = Path(file_path).suffix.lower()
 
-    def process_document(self, file_path: str) -> DocumentSchema:
+        try:
 
-        extension = os.path.splitext(file_path)[1].lower()
+            processor = ProcessorFactory.get_processor(
+                extension
+            )
 
-        if extension == ".pdf":
+            return processor.process(file_path)
 
-            return self.pdf_processor.process(file_path)
+        except UnsupportedDocumentTypeError:
 
-        raise ValueError(
-            f"Unsupported document type: {extension}"
-        )
+            raise
