@@ -12,10 +12,15 @@ class PDFProcessor(BaseProcessor):
     """
 
     def open_document(self, file_path: str):
-
+        """
+        Open the PDF document using PyMuPDF.
+        """
         return fitz.open(file_path)
 
     def extract_text(self, document) -> str:
+        """
+        Extract text from all pages of the PDF.
+        """
 
         text = ""
 
@@ -25,6 +30,9 @@ class PDFProcessor(BaseProcessor):
         return text
 
     def extract_metadata(self, document) -> dict:
+        """
+        Extract metadata from the PDF.
+        """
 
         metadata = document.metadata
 
@@ -37,6 +45,10 @@ class PDFProcessor(BaseProcessor):
         }
 
     def clean_text(self, text: str) -> str:
+        """
+        Clean extracted PDF text.
+        Removes unnecessary whitespace and blank lines.
+        """
 
         lines = []
 
@@ -50,27 +62,40 @@ class PDFProcessor(BaseProcessor):
         return "\n".join(lines)
 
     def process(self, file_path: str) -> DocumentSchema:
+        """
+        Complete PDF processing pipeline.
+
+        Steps:
+        1. Open PDF
+        2. Extract text
+        3. Extract metadata
+        4. Clean text
+        5. Generate document ID
+        6. Return DocumentSchema
+        """
 
         document = self.open_document(file_path)
 
-        text = self.extract_text(document)
+        try:
+            text = self.extract_text(document)
+            metadata = self.extract_metadata(document)
+            cleaned_text = self.clean_text(text)
 
-        metadata = self.extract_metadata(document)
+            document_id = os.path.splitext(
+                os.path.basename(file_path)
+            )[0]
 
-        cleaned_text = self.clean_text(text)
+            # Step 5: Create DocumentSchema
+            result = DocumentSchema(
 
-        result = DocumentSchema(
+                document_id=document_id,
+                filename=os.path.basename(file_path),
+                file_type="pdf",
+                text=cleaned_text,
+                metadata=metadata
 
-            filename=os.path.basename(file_path),
+            )
+            return result
 
-            file_type="pdf",
-
-            text=cleaned_text,
-
-            metadata=metadata
-
-        )
-
-        document.close()
-
-        return result
+        finally:
+            document.close()

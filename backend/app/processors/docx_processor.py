@@ -1,4 +1,5 @@
 import os
+
 from docx import Document
 
 from app.processors.base_processor import BaseProcessor
@@ -12,10 +13,15 @@ class DOCXProcessor(BaseProcessor):
     """
 
     def open_document(self, file_path: str):
-
+        """
+        Open the DOCX document.
+        """
         return Document(file_path)
 
     def extract_text(self, document) -> str:
+        """
+        Extract text from all paragraphs in the DOCX document.
+        """
 
         paragraphs = []
 
@@ -23,11 +29,16 @@ class DOCXProcessor(BaseProcessor):
 
             if paragraph.text.strip():
 
-                paragraphs.append(paragraph.text.strip())
+                paragraphs.append(
+                    paragraph.text.strip()
+                )
 
         return "\n".join(paragraphs)
 
     def extract_metadata(self, document) -> dict:
+        """
+        Extract metadata from the DOCX document.
+        """
 
         properties = document.core_properties
 
@@ -48,6 +59,10 @@ class DOCXProcessor(BaseProcessor):
         }
 
     def clean_text(self, text: str) -> str:
+        """
+        Clean extracted text by removing
+        unnecessary whitespace and blank lines.
+        """
 
         lines = []
 
@@ -62,16 +77,37 @@ class DOCXProcessor(BaseProcessor):
         return "\n".join(lines)
 
     def process(self, file_path: str) -> DocumentSchema:
+        """
+        Complete DOCX processing pipeline.
+
+        Steps:
+        1. Open DOCX document
+        2. Extract text
+        3. Extract metadata
+        4. Clean text
+        5. Generate document ID
+        6. Return DocumentSchema
+        """
 
         document = self.open_document(file_path)
 
+        # Extract text
         text = self.extract_text(document)
 
+        # Extract metadata
         metadata = self.extract_metadata(document)
 
+        # Clean extracted text
         cleaned_text = self.clean_text(text)
 
-        return DocumentSchema(
+        document_id = os.path.splitext(
+            os.path.basename(file_path)
+        )[0]
+
+        # Create DocumentSchema
+        result = DocumentSchema(
+
+            document_id=document_id,
 
             filename=os.path.basename(file_path),
 
@@ -82,3 +118,5 @@ class DOCXProcessor(BaseProcessor):
             metadata=metadata
 
         )
+
+        return result

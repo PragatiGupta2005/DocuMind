@@ -1,4 +1,5 @@
 import os
+
 from pptx import Presentation
 
 from app.processors.base_processor import BaseProcessor
@@ -12,10 +13,15 @@ class PPTXProcessor(BaseProcessor):
     """
 
     def open_document(self, file_path: str):
-
+        """
+        Open the PowerPoint presentation.
+        """
         return Presentation(file_path)
 
     def extract_text(self, presentation) -> str:
+        """
+        Extract text from all slides.
+        """
 
         slides_text = []
 
@@ -34,6 +40,9 @@ class PPTXProcessor(BaseProcessor):
         return "\n".join(slides_text)
 
     def extract_metadata(self, presentation) -> dict:
+        """
+        Extract metadata from the PowerPoint presentation.
+        """
 
         properties = presentation.core_properties
 
@@ -56,6 +65,10 @@ class PPTXProcessor(BaseProcessor):
         }
 
     def clean_text(self, text: str) -> str:
+        """
+        Clean extracted text by removing
+        unnecessary whitespace and blank lines.
+        """
 
         lines = []
 
@@ -70,16 +83,46 @@ class PPTXProcessor(BaseProcessor):
         return "\n".join(lines)
 
     def process(self, file_path: str) -> DocumentSchema:
+        """
+        Complete PPTX processing pipeline.
+
+        Steps:
+        1. Open presentation
+        2. Extract text
+        3. Extract metadata
+        4. Clean text
+        5. Generate document ID
+        6. Return DocumentSchema
+        """
 
         presentation = self.open_document(file_path)
 
+        # Extract text
         text = self.extract_text(presentation)
 
+        # Extract metadata
         metadata = self.extract_metadata(presentation)
 
+        # Clean text
         cleaned_text = self.clean_text(text)
 
-        return DocumentSchema(
+        # Generate unique document ID
+        #
+        # Example:
+        # uploads/
+        # 69759dba-d439-4cb2-8cd0-af880a4731b9.pptx
+        #
+        # becomes:
+        # 69759dba-d439-4cb2-8cd0-af880a4731b9
+
+        document_id = os.path.splitext(
+            os.path.basename(file_path)
+        )[0]
+
+        # Create DocumentSchema
+        result = DocumentSchema(
+
+            document_id=document_id,
 
             filename=os.path.basename(file_path),
 
@@ -90,3 +133,5 @@ class PPTXProcessor(BaseProcessor):
             metadata=metadata
 
         )
+
+        return result
