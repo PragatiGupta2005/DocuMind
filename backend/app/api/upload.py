@@ -1,5 +1,4 @@
 from fastapi import APIRouter, File, UploadFile
-
 from app.controllers.upload_controller import UploadController
 from app.schemas.upload_response_schema import UploadResponseSchema
 
@@ -9,7 +8,6 @@ router = APIRouter(
 )
 
 controller = UploadController()
-
 
 @router.post(
     "/",
