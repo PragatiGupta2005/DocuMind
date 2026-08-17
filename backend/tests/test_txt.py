@@ -6,4 +6,4 @@ result = processor.process(
     "uploads/30b678c4-c88e-4f9f-8349-fda108ac1f95.txt"
 )
 
-print(result.json(indent=4))
+print(result.model_dump_json(indent=4))

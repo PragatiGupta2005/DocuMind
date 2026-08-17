@@ -14,4 +14,4 @@ chunk = ChunkSchema(
 
 )
 
-print(chunk.json(indent=4))
+print(chunk.model_dump_json(indent=4))
