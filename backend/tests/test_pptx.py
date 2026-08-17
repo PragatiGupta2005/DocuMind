@@ -1,9 +1,32 @@
+from pathlib import Path
+
 from app.processors.pptx_processor import PPTXProcessor
 
-processor = PPTXProcessor()
 
-result = processor.process(
-    "e1c94042-146d-4d2c-bad7-03c7719eefec.pptx"
+# Get the backend directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Test PPTX file
+TEST_FILE = (
+    BASE_DIR
+    / "tests"
+    / "fixtures"
+    / "sample.pptx"
 )
 
-print(result.model_dump_json(indent=4))
+
+def test_pptx_processor():
+
+    processor = PPTXProcessor()
+
+    result = processor.process(
+        str(TEST_FILE)
+    )
+
+    print(
+        result.model_dump_json(
+            indent=4
+        )
+    )
+
+    assert result is not None
