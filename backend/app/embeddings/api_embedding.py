@@ -1,31 +1,32 @@
-from openai import OpenAI
+from google import genai
+from google.genai import types
 
 from app.embeddings.base_embedding import BaseEmbedding
 
 from app.core.settings import (
     API_EMBEDDING_MODEL,
-    OPENAI_API_KEY
+    GEMINI_API_KEY
 )
 
 
 class APIEmbedding(BaseEmbedding):
     """
-    API-based embedding provider using OpenAI.
+    API-based embedding provider using Gemini.
     """
 
     def __init__(
         self,
         model_name: str = API_EMBEDDING_MODEL
     ):
-        if not OPENAI_API_KEY:
+        if not GEMINI_API_KEY:
             raise ValueError(
-                "OPENAI_API_KEY is not configured."
+                "GEMINI_API_KEY is not configured."
             )
 
         self.model_name = model_name
 
-        self.client = OpenAI(
-            api_key=OPENAI_API_KEY
+        self.client = genai.Client(
+            api_key=GEMINI_API_KEY
         )
 
     def embed(
@@ -41,12 +42,12 @@ class APIEmbedding(BaseEmbedding):
                 "Text cannot be empty."
             )
 
-        response = self.client.embeddings.create(
+        response = self.client.models.embed_content(
             model=self.model_name,
-            input=text
+            contents=text
         )
 
-        return response.data[0].embedding
+        return response.embeddings[0].values
 
     def embed_batch(
         self,
@@ -67,14 +68,14 @@ class APIEmbedding(BaseEmbedding):
                 "Texts cannot contain empty values."
             )
 
-        response = self.client.embeddings.create(
+        response = self.client.models.embed_content(
             model=self.model_name,
-            input=texts
+            contents=texts
         )
 
         return [
-            item.embedding
-            for item in response.data
+            embedding.values
+            for embedding in response.embeddings
         ]
 
     def get_model_name(self) -> str:
