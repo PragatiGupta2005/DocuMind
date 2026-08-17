@@ -6,4 +6,4 @@ result = processor.process(
     "uploads/f5c34c2b-e0b0-467c-b08a-86f42497450d.docx"
 )
 
-print(result.json(indent=4))
+print(result.model_dump_json(indent=4))

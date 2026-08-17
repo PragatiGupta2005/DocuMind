@@ -6,4 +6,4 @@ result = processor.process(
     "uploads/your_file.pptx"
 )
 
-print(result.json(indent=4))
+print(result.model_dump_json(indent=4))

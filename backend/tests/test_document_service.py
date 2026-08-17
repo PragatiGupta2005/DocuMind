@@ -8,4 +8,4 @@ result = service.process_document(
     "uploads/69759dba-d439-4cb2-8cd0-af880a4731b9.pdf"
 )
 
-print(result.json(indent=4))
+print(result.model_dump_json(indent=4))
