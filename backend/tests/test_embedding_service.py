@@ -1,7 +1,6 @@
 from app.embeddings.embedding_service import EmbeddingService
 from app.schemas.chunk_schema import ChunkSchema
-
-
+import pytest
 def create_test_chunk(
     chunk_id: int,
     text: str
@@ -24,12 +23,7 @@ def create_test_chunk(
 def test_embed_single_chunk():
 
     service = EmbeddingService()
-
-    chunk = create_test_chunk(
-        chunk_id=1,
-        text="Artificial Intelligence is amazing."
-    )
-
+    chunk = create_test_chunk(chunk_id=1,text="Artificial Intelligence is amazing.")
     result = service.embed_chunk(chunk)
 
     assert result.document_id == "doc_001"
@@ -46,9 +40,7 @@ def test_embed_single_chunk():
 
 
 def test_embed_multiple_chunks():
-
     service = EmbeddingService()
-
     chunks = [
         create_test_chunk(
             chunk_id=1,
@@ -65,9 +57,7 @@ def test_embed_multiple_chunks():
     ]
 
     results = service.embed_chunks(chunks)
-
     assert len(results) == 3
-
     for chunk, embedding in zip(
         chunks,
         results
@@ -88,3 +78,98 @@ def test_embed_multiple_chunks():
             len(embedding.vector)
             == embedding.dimensions
         )
+
+def test_empty_chunk_list():
+    service = EmbeddingService()
+    result = service.embed_chunks([])
+    assert result == []
+
+def test_empty_chunk_text():
+
+    service = EmbeddingService()
+    chunk = create_test_chunk(
+        chunk_id=1,
+        text=""
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="Chunk text cannot be empty."
+    ):
+        service.embed_chunk(chunk)
+
+def test_whitespace_chunk_text():
+
+    service = EmbeddingService()
+
+    chunk = create_test_chunk(
+        chunk_id=1,
+        text="   "
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="Chunk text cannot be empty."
+    ):
+        service.embed_chunk(chunk)
+
+def test_empty_text_in_batch():
+
+    service = EmbeddingService()
+
+    chunks = [
+        create_test_chunk(
+            chunk_id=1,
+            text="Artificial Intelligence is amazing."
+        ),
+        create_test_chunk(
+            chunk_id=2,
+            text=""
+        )
+    ]
+
+    with pytest.raises(
+        ValueError,
+        match="Chunk 2 contains empty text."
+    ):
+        service.embed_chunks(chunks)
+
+class FakeProvider:
+
+    def embed_batch(self, texts):
+
+        # Intentionally return fewer vectors
+        return [
+            [0.1, 0.2, 0.3]
+        ]
+
+    def embed(self, text):
+
+        return [0.1, 0.2, 0.3]
+
+    def get_model_name(self):
+
+        return "fake-model"
+
+def test_embedding_count_mismatch():
+
+    service = EmbeddingService()
+
+    service.provider = FakeProvider()
+
+    chunks = [
+        create_test_chunk(
+            chunk_id=1,
+            text="First chunk"
+        ),
+        create_test_chunk(
+            chunk_id=2,
+            text="Second chunk"
+        )
+    ]
+
+    with pytest.raises(
+        RuntimeError,
+        match="Number of generated embeddings does not match"
+    ):
+        service.embed_chunks(chunks)

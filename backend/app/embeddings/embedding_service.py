@@ -1,20 +1,16 @@
 from app.schemas.chunk_schema import ChunkSchema
 from app.schemas.embedding_schema import EmbeddingSchema
-
 from app.embeddings.embedding_factory import EmbeddingFactory
-
 
 class EmbeddingService:
     """
     Handles embedding generation for document chunks.
     """
-
     def __init__(self):
         """
         Initialize the embedding provider using
         the configured embedding provider.
         """
-
         self.provider = EmbeddingFactory.get_provider()
 
     def embed_chunk(
@@ -25,17 +21,12 @@ class EmbeddingService:
         Generate an embedding for a single chunk.
         """
 
-        if not chunk.text or not chunk.text.strip():
-            raise ValueError(
-                "Chunk text cannot be empty."
-            )
+        if not chunk.text or not chunk.text.strip():  #Single chunk
+            raise ValueError("Chunk text cannot be empty.")
 
-        vector = self.provider.embed(
-            chunk.text
-        )
+        vector = self.provider.embed(chunk.text)
 
         metadata = dict(chunk.metadata)
-
         metadata.update({
             "chunk_id": chunk.chunk_id,
             "document_name": chunk.document_name,
@@ -68,22 +59,17 @@ class EmbeddingService:
         for chunk in chunks:
 
             if not chunk.text or not chunk.text.strip():
-                raise ValueError(
-                    f"Chunk {chunk.chunk_id} contains empty text."
-                )
-
+                raise ValueError(f"Chunk {chunk.chunk_id} contains empty text.")
             texts.append(chunk.text)
 
-        vectors = self.provider.embed_batch(
-            texts
-        )
-
+        vectors = self.provider.embed_batch(texts)
+        if len(chunks) != len(vectors):
+            raise RuntimeError(
+                "Number of generated embeddings does not "
+                "match number of input chunks."
+            )
         embeddings = []
-
-        for chunk, vector in zip(
-            chunks,
-            vectors
-        ):
+        for chunk, vector in zip(chunks,vectors):
 
             metadata = dict(chunk.metadata)
 
