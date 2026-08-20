@@ -143,8 +143,6 @@ chunks/
 # 12. Local Vector Stores / Databases
 # ------------------------------------------------------------
 
-vector_store/
-vectorstore/
 chroma/
 chroma_db/
 faiss_index/
@@ -159,7 +157,6 @@ qdrant_data/
 # 13. ML / Model Artifacts
 # ------------------------------------------------------------
 
-models/
 model_cache/
 huggingface_cache/
 
