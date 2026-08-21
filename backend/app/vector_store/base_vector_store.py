@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-
 from app.schemas.vector_store_schema import VectorStoreSchema
+from app.schemas.search_result_schema import SearchResultSchema
 
 
 class BaseVectorStore(ABC):
@@ -23,7 +23,7 @@ class BaseVectorStore(ABC):
         self,
         query_vector: list[float],
         top_k: int = 5
-    ) -> list[VectorStoreSchema]:
+    ) -> list[SearchResultSchema]:
         """
         Search for the most similar vectors.
         """

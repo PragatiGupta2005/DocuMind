@@ -1,9 +1,8 @@
 from qdrant_client.models import PointStruct
-
 from app.schemas.vector_store_schema import VectorStoreSchema
 from app.vector_store.base_vector_store import BaseVectorStore
 from app.vector_store.qdrant_client import QdrantClientManager
-
+from app.schemas.search_result_schema import SearchResultSchema
 
 class QdrantVectorStore(BaseVectorStore):
     """
@@ -56,17 +55,29 @@ class QdrantVectorStore(BaseVectorStore):
         )
 
     def search(
-        self,
-        query_vector: list[float],
-        top_k: int = 5,
-    ) -> list[VectorStoreSchema]:
+    self,
+    query_vector: list[float],
+    top_k: int = 5,
+    ) -> list[SearchResultSchema]:
         """
-        Search will be implemented in Phase 6.
+        Search for the most similar vectors in Qdrant.
         """
 
-        raise NotImplementedError(
-            "Search will be implemented in Phase 6."
-        )
+        results = self.client.query_points(
+            collection_name=self.collection_name,
+            query=query_vector,
+            limit=top_k,
+            with_payload=True,
+        ).points
+
+        return [
+            SearchResultSchema(
+                point_id=str(result.id),
+                score=result.score,
+                payload=result.payload or {},
+            )
+            for result in results
+        ]
 
     def delete(
         self,
