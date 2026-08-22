@@ -1,11 +1,6 @@
 import uuid
-
 from app.schemas.vector_store_schema import VectorStoreSchema
 from app.vector_store.qdrant_store import QdrantVectorStore
-from app.vector_store.collection_config import (
-    LOCAL_COLLECTION_NAME,
-)
-
 
 def create_test_record():
 
@@ -27,11 +22,10 @@ def create_test_record():
         },
     )
 
-
-def test_add_single_embedding():
+def test_add_single_embedding(test_collection):
 
     store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
+        collection_name=test_collection
     )
 
     record = create_test_record()
@@ -40,11 +34,10 @@ def test_add_single_embedding():
 
     assert store.count() >= 1
 
-
-def test_add_multiple_embeddings():
+def test_add_multiple_embeddings(test_collection):
 
     store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
+        collection_name=test_collection
     )
 
     records = []
@@ -73,21 +66,20 @@ def test_add_multiple_embeddings():
 
     assert store.count() >= 3
 
-
-def test_add_empty_records():
+def test_add_empty_records(test_collection):
 
     store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
+        collection_name=test_collection
     )
 
     result = store.add([])
 
     assert result is None
 
-def test_verify_stored_point():
+def test_verify_stored_point(test_collection):
 
     store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
+        collection_name=test_collection
     )
 
     record = create_test_record()
@@ -97,7 +89,7 @@ def test_verify_stored_point():
 
     # Retrieve the same point directly from Qdrant
     result = store.client.retrieve(
-        collection_name=LOCAL_COLLECTION_NAME,
+        collection_name=test_collection,
         ids=[record.point_id],
         with_payload=True,
         with_vectors=True,
@@ -133,11 +125,13 @@ def test_verify_stored_point():
     assert point.payload["start_index"] == 0
     assert point.payload["end_index"] == 38
 
-def test_similarity_search():
+def test_similarity_search(test_collection):
 
     store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
+        collection_name=test_collection
     )
+
+    test_document_id = f"similarity-test-{uuid.uuid4()}"
 
     vector_a = [0.0] * 384
     vector_a[0] = 1.0
@@ -147,7 +141,7 @@ def test_similarity_search():
 
     record_a = VectorStoreSchema(
         point_id=str(uuid.uuid4()),
-        document_id="search-doc-a",
+        document_id=test_document_id,
         chunk_uuid=str(uuid.uuid4()),
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         dimensions=384,
@@ -161,7 +155,7 @@ def test_similarity_search():
 
     record_b = VectorStoreSchema(
         point_id=str(uuid.uuid4()),
-        document_id="search-doc-b",
+        document_id=test_document_id,
         chunk_uuid=str(uuid.uuid4()),
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         dimensions=384,
@@ -181,18 +175,27 @@ def test_similarity_search():
     results = store.search(
         query_vector=vector_a,
         top_k=2,
+        document_id=test_document_id,
     )
 
     assert len(results) == 2
-    assert results[0].point_id == record_a.point_id
-    assert results[0].score >= results[1].score
-    assert results[0].payload["document_id"] == ("search-doc-a")
 
-def test_search_top_k():
+    assert results[0].point_id == record_a.point_id
+
+    assert results[0].score >= results[1].score
+
+    assert (
+        results[0].payload["document_id"]
+        == test_document_id
+    )
+
+def test_search_top_k(test_collection):
 
     store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
+        collection_name=test_collection
     )
+
+    test_document_id = f"topk-test-{uuid.uuid4()}"
 
     records = []
 
@@ -203,7 +206,7 @@ def test_search_top_k():
 
         record = VectorStoreSchema(
             point_id=str(uuid.uuid4()),
-            document_id=f"topk-doc-{i}",
+            document_id=test_document_id,
             chunk_uuid=str(uuid.uuid4()),
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             dimensions=384,
@@ -225,17 +228,147 @@ def test_search_top_k():
     results = store.search(
         query_vector=query_vector,
         top_k=3,
+        document_id=test_document_id,
     )
 
     assert len(results) == 3
     assert results[0].point_id == records[0].point_id
+    assert results[0].score >= results[1].score
+    assert results[1].score >= results[2].score
 
-def test_search_returns_list():
+def test_search_returns_list(test_collection):
 
-    store = QdrantVectorStore(collection_name=LOCAL_COLLECTION_NAME)
+    store = QdrantVectorStore(collection_name=test_collection)
     query_vector = [0.0] * 384
     results = store.search(
         query_vector=query_vector,
         top_k=5,
     )
     assert isinstance(results, list)
+
+def test_search_by_document_id(test_collection):
+
+    store = QdrantVectorStore(
+        collection_name=test_collection
+    )
+
+    vector_a = [0.0] * 384
+    vector_a[0] = 1.0
+
+    vector_b = [0.0] * 384
+    vector_b[0] = 0.9
+    vector_b[1] = 0.1
+
+    record_a = VectorStoreSchema(
+        point_id=str(uuid.uuid4()),
+        document_id="filter-doc-a",
+        chunk_uuid=str(uuid.uuid4()),
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        dimensions=384,
+        vector=vector_a,
+        payload={
+            "chunk_id": 1,
+            "document_name": "filter-a.pdf",
+            "text": "Document A content",
+        },
+    )
+
+    record_b = VectorStoreSchema(
+        point_id=str(uuid.uuid4()),
+        document_id="filter-doc-b",
+        chunk_uuid=str(uuid.uuid4()),
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        dimensions=384,
+        vector=vector_b,
+        payload={
+            "chunk_id": 1,
+            "document_name": "filter-b.pdf",
+            "text": "Document B content",
+        },
+    )
+
+    store.add([
+        record_a,
+        record_b,
+    ])
+
+    results = store.search(
+        query_vector=vector_a,
+        top_k=5,
+        document_id="filter-doc-b",
+    )
+
+    assert len(results) >= 1
+
+    for result in results:
+        assert (
+            result.payload["document_id"]
+            == "filter-doc-b"
+        )
+
+def test_delete_by_document_id(test_collection):
+
+    store = QdrantVectorStore(
+        collection_name=test_collection
+    )
+
+    vector = [0.0] * 384
+    vector[0] = 1.0
+
+    record_a = VectorStoreSchema(
+        point_id=str(uuid.uuid4()),
+        document_id="delete-doc-a",
+        chunk_uuid=str(uuid.uuid4()),
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        dimensions=384,
+        vector=vector,
+        payload={
+            "chunk_id": 1,
+            "document_name": "delete-a.pdf",
+            "text": "Delete me",
+        },
+    )
+
+    record_b = VectorStoreSchema(
+        point_id=str(uuid.uuid4()),
+        document_id="delete-doc-b",
+        chunk_uuid=str(uuid.uuid4()),
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        dimensions=384,
+        vector=vector,
+        payload={
+            "chunk_id": 1,
+            "document_name": "keep-b.pdf",
+            "text": "Keep me",
+        },
+    )
+
+    store.add([
+        record_a,
+        record_b,
+    ])
+
+    # Delete only document A
+    store.delete("delete-doc-a")
+
+    # Document A should no longer exist
+    deleted_result = store.client.retrieve(
+        collection_name=test_collection,
+        ids=[record_a.point_id],
+        with_payload=True,
+    )
+
+    assert len(deleted_result) == 0
+
+    # Document B should still exist
+    remaining_result = store.client.retrieve(
+        collection_name=test_collection,
+        ids=[record_b.point_id],
+        with_payload=True,
+    )
+
+    assert len(remaining_result) == 1
+    assert (
+        remaining_result[0].payload["document_id"]
+        == "delete-doc-b"
+    )

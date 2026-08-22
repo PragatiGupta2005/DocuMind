@@ -3,6 +3,7 @@ from app.schemas.vector_store_schema import VectorStoreSchema
 from app.vector_store.base_vector_store import BaseVectorStore
 from app.vector_store.qdrant_client import QdrantClientManager
 from app.schemas.search_result_schema import SearchResultSchema
+from qdrant_client.models import FieldCondition,Filter,MatchValue
 
 class QdrantVectorStore(BaseVectorStore):
     """
@@ -55,17 +56,36 @@ class QdrantVectorStore(BaseVectorStore):
         )
 
     def search(
-    self,
-    query_vector: list[float],
-    top_k: int = 5,
+        self,
+        query_vector: list[float],
+        top_k: int = 5,
+        document_id: str | None = None,
     ) -> list[SearchResultSchema]:
         """
-        Search for the most similar vectors in Qdrant.
+        Search for the most similar vectors.
+
+        If document_id is provided, restrict the search
+        to vectors belonging to that document.
         """
+
+        query_filter = None
+
+        if document_id is not None:
+            query_filter = Filter(
+                must=[
+                    FieldCondition(
+                        key="document_id",
+                        match=MatchValue(
+                            value=document_id
+                        ),
+                    )
+                ]
+            )
 
         results = self.client.query_points(
             collection_name=self.collection_name,
             query=query_vector,
+            query_filter=query_filter,
             limit=top_k,
             with_payload=True,
         ).points
@@ -84,11 +104,21 @@ class QdrantVectorStore(BaseVectorStore):
         document_id: str,
     ) -> None:
         """
-        Delete will be implemented in a later phase.
+        Delete all vectors belonging to a document.
         """
 
-        raise NotImplementedError(
-            "Delete will be implemented later."
+        self.client.delete(
+            collection_name=self.collection_name,
+            points_selector=Filter(
+                must=[
+                    FieldCondition(
+                        key="document_id",
+                        match=MatchValue(
+                            value=document_id
+                        ),
+                    )
+                ]
+            ),
         )
 
     def count(self) -> int:

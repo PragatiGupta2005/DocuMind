@@ -5,7 +5,9 @@ from app.vector_store.collection_config import (
     LOCAL_VECTOR_SIZE,
     API_COLLECTION_NAME,
     API_VECTOR_SIZE,
+    TEST_LOCAL_COLLECTION_NAME,
 )
+
 from app.vector_store.qdrant_client import (
     QdrantClientManager,
 )
@@ -64,4 +66,14 @@ class QdrantCollectionManager:
         self.create_collection(
             collection_name=API_COLLECTION_NAME,
             vector_size=API_VECTOR_SIZE,
+        )
+
+    def create_test_collection(self):
+        """
+        Create the dedicated local test collection.
+        """
+
+        self.create_collection(
+            collection_name=TEST_LOCAL_COLLECTION_NAME,
+            vector_size=LOCAL_VECTOR_SIZE,
         )

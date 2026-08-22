@@ -22,10 +22,13 @@ class BaseVectorStore(ABC):
     def search(
         self,
         query_vector: list[float],
-        top_k: int = 5
+        top_k: int = 5,
+        document_id: str | None = None,
     ) -> list[SearchResultSchema]:
         """
         Search for the most similar vectors.
+        If document_id is provided, search only within
+        that document.
         """
         pass
 
