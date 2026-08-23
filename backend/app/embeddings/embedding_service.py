@@ -13,6 +13,21 @@ class EmbeddingService:
         """
         self.provider = EmbeddingFactory.get_provider()
 
+    def embed_text(
+        self,
+        text: str
+    ) -> list[float]:
+        """
+        Generate an embedding for raw text.
+        """
+
+        if not text or not text.strip():
+            raise ValueError(
+                "Text cannot be empty."
+            )
+
+        return self.provider.embed(text)
+
     def embed_chunk(
         self,
         chunk: ChunkSchema
