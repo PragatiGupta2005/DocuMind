@@ -1,3 +1,9 @@
+from app.core.settings import (
+    GEMINI_API_KEY,
+    LLM_MODEL,
+    LLM_PROVIDER,
+)
+
 from app.llm.llm_factory import LLMFactory
 from app.llm.llm_provider import LLMProvider
 
@@ -10,9 +16,6 @@ class LLMService:
     def __init__(
         self,
         provider: LLMProvider | None = None,
-        provider_name: str | None = None,
-        api_key: str | None = None,
-        model_name: str | None = None,
     ):
 
         if provider is not None:
@@ -21,16 +24,11 @@ class LLMService:
 
         else:
 
-            if provider_name is None:
-                raise ValueError(
-                    "LLM provider name is required."
-                )
-
             self.provider = (
                 LLMFactory.create_provider(
-                    provider_name=provider_name,
-                    api_key=api_key,
-                    model_name=model_name,
+                    provider_name=LLM_PROVIDER,
+                    api_key=GEMINI_API_KEY,
+                    model_name=LLM_MODEL,
                 )
             )
 
