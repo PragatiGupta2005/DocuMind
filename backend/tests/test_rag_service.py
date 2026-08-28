@@ -295,3 +295,44 @@ def test_rag_service_rejects_empty_query():
     with pytest.raises(ValueError):
 
         service.generate(request)
+
+def test_rag_service_returns_multiple_sources():
+
+    service, _, _, _, _ = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    assert len(response.sources) == 1
+
+    assert response.sources[0].document_id == "doc-001"
+
+def test_sources_preserve_context_order():
+
+    service, _, context_builder, _, _ = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    assert response.sources[0].chunk_id == 1
+    assert response.sources[0].document_name == "test.pdf"
+
+def test_source_contains_retrieval_score():
+
+    service, _, _, _, _ = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    source = response.sources[0]
+
+    assert source.score == 0.95
