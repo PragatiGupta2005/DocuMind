@@ -1,18 +1,22 @@
 from fastapi import FastAPI
 
-from app.api.upload import router as upload_router
 
 app = FastAPI(
     title="DocuMind API",
-    description="Enterprise Multi Document RAG System",
-    version="1.0.0"
+    description="Document Intelligence and Retrieval-Augmented Generation API",
+    version="1.0.0",
 )
-
-app.include_router(upload_router)
 
 
 @app.get("/")
-async def home():
+def root():
     return {
-        "message": "Welcome to DocuMind API 🚀"
+        "message": "DocuMind API is running"
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
     }
