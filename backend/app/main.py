@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from app.api.documents import router as documents_router
 
 app = FastAPI(
     title="DocuMind API",
@@ -21,3 +21,5 @@ def health_check():
     return {
         "status": "healthy"
     }
+
+app.include_router(documents_router)
