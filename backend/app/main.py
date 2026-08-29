@@ -3,7 +3,7 @@ from fastapi import FastAPI
 
 app = FastAPI(
     title="DocuMind API",
-    description="Document Intelligence and Retrieval-Augmented Generation API",
+    description="Document-based Retrieval Augmented Generation system",
     version="1.0.0",
 )
 
@@ -11,12 +11,13 @@ app = FastAPI(
 @app.get("/")
 def root():
     return {
-        "message": "DocuMind API is running"
+        "message": "Welcome to DocuMind API",
+        "version": "1.0.0",
     }
 
 
 @app.get("/health")
-def health():
+def health_check():
     return {
         "status": "healthy"
     }
