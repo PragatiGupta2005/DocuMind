@@ -33,7 +33,8 @@ class UploadService:
 
         # Step 3: Process document
         document = (self.processing_service.process_document(storage_path))
-
+        document.metadata["storage_path"] = storage_path
+        
         # Step 4: Chunk document
         chunks = (self.chunking_service.chunk_document(document))
 

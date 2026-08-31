@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from app.services.upload_service import UploadService
 from app.storage.document_registry import DocumentRegistry
+from app.services.document_service import DocumentService
 
 router = APIRouter(
     prefix="/documents",
@@ -42,3 +43,28 @@ async def get_document(
             detail="Document not found",
         )
     return document
+
+@router.delete("/{document_id}")
+async def delete_document(
+    document_id: str,
+):
+    """
+    Delete a document and its associated vectors.
+    """
+
+    document_service = DocumentService()
+
+    deleted = document_service.delete_document(
+        document_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Document not found",
+        )
+
+    return {
+        "message": "Document deleted successfully",
+        "document_id": document_id,
+    }

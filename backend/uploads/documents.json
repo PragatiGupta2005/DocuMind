@@ -306,5 +306,89 @@
       "created": "1788205792.343459",
       "modified": "1788205792.343459"
     }
+  },
+  {
+    "document_id": "584954fc-b645-40ea-b372-8eef09bf86ad",
+    "filename": "584954fc-b645-40ea-b372-8eef09bf86ad.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1788207256.7755938",
+      "modified": "1788207256.7755938",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_txt_upload_processes_and_0\\584954fc-b645-40ea-b372-8eef09bf86ad.txt"
+    }
+  },
+  {
+    "document_id": "2353eec7-511d-45d9-bd81-18b3289cec5f",
+    "filename": "2353eec7-511d-45d9-bd81-18b3289cec5f.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788207263.6376407",
+      "modified": "1788207263.6376407",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_txt_upload_preserves_docu0\\2353eec7-511d-45d9-bd81-18b3289cec5f.txt"
+    }
+  },
+  {
+    "document_id": "e804fcbf-5f06-4f43-95ff-55924ed9efd4",
+    "filename": "e804fcbf-5f06-4f43-95ff-55924ed9efd4.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1788207270.420093",
+      "modified": "1788207270.420093",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_txt_upload_generates_chun0\\e804fcbf-5f06-4f43-95ff-55924ed9efd4.txt"
+    }
+  },
+  {
+    "document_id": "31f2e3d4-2ba6-463b-b2f2-447cf5b11a3b",
+    "filename": "31f2e3d4-2ba6-463b-b2f2-447cf5b11a3b.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788207277.288555",
+      "modified": "1788207277.288555",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_upload_creates_unique_doc0\\31f2e3d4-2ba6-463b-b2f2-447cf5b11a3b.txt"
+    }
+  },
+  {
+    "document_id": "0f3e920e-232b-4716-960d-1acec6b15ea1",
+    "filename": "0f3e920e-232b-4716-960d-1acec6b15ea1.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788207284.4953053",
+      "modified": "1788207284.5012617",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_upload_creates_unique_doc0\\0f3e920e-232b-4716-960d-1acec6b15ea1.txt"
+    }
+  },
+  {
+    "document_id": "012e5ae7-3c39-4776-b613-033927c546db",
+    "filename": "012e5ae7-3c39-4776-b613-033927c546db.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data.",
+    "metadata": {
+      "size_bytes": "107",
+      "created": "1788207359.0524204",
+      "modified": "1788207359.0524204",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_upload_indexes_document_i0\\012e5ae7-3c39-4776-b613-033927c546db.txt"
+    }
+  },
+  {
+    "document_id": "7e0eaae9-d29e-4128-8223-d01f87bf8f8a",
+    "filename": "7e0eaae9-d29e-4128-8223-d01f87bf8f8a.txt",
+    "file_type": "txt",
+    "text": "Machine learning allows computers to learn patterns from data without being explicitly programmed.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788207367.5159283",
+      "modified": "1788207367.5159283",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_uploaded_document_is_sema0\\7e0eaae9-d29e-4128-8223-d01f87bf8f8a.txt"
+    }
   }
 ]

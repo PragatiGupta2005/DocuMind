@@ -42,7 +42,6 @@ def test_get_document_returns_document(
     assert data["file_type"] == "txt"
     assert data["text"] == "Machine learning is a branch of AI."
 
-
 def test_get_missing_document_returns_404(
     tmp_path,
     monkeypatch,
@@ -51,16 +50,26 @@ def test_get_missing_document_returns_404(
         "app.storage.document_registry.UPLOAD_DIRECTORY",
         str(tmp_path),
     )
-
     # Create an empty registry.
     DocumentRegistry()
-
     response = client.get(
         "/documents/does-not-exist"
     )
-
     assert response.status_code == 404
-
     data = response.json()
+    assert data["detail"] == "Document not found"
 
+def test_delete_missing_document_returns_404(
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.storage.document_registry.UPLOAD_DIRECTORY",
+        str(tmp_path),
+    )
+    response = client.delete(
+        "/documents/does-not-exist"
+    )
+    assert response.status_code == 404
+    data = response.json()
     assert data["detail"] == "Document not found"
