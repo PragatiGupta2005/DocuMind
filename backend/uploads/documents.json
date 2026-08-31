@@ -152,5 +152,159 @@
       "created": "1788201935.9162889",
       "modified": "1788201935.920904"
     }
+  },
+  {
+    "document_id": "8764d315-f40a-482f-8dd9-e7cbba665915",
+    "filename": "8764d315-f40a-482f-8dd9-e7cbba665915.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1788204234.1560037",
+      "modified": "1788204234.1569986"
+    }
+  },
+  {
+    "document_id": "e629631c-3aa3-4128-896c-8c40ed15ae3e",
+    "filename": "e629631c-3aa3-4128-896c-8c40ed15ae3e.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788204240.8800855",
+      "modified": "1788204240.8810804"
+    }
+  },
+  {
+    "document_id": "c32df190-5bfa-4cbd-bf13-dc7ddf9d8cc1",
+    "filename": "c32df190-5bfa-4cbd-bf13-dc7ddf9d8cc1.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1788204247.2910035",
+      "modified": "1788204247.2920017"
+    }
+  },
+  {
+    "document_id": "aa9f1c6b-4ff3-4234-9b20-ac4c79a143e8",
+    "filename": "aa9f1c6b-4ff3-4234-9b20-ac4c79a143e8.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788204253.7195742",
+      "modified": "1788204253.7205572"
+    }
+  },
+  {
+    "document_id": "712afd0c-021c-4a86-bd28-35778833e371",
+    "filename": "712afd0c-021c-4a86-bd28-35778833e371.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788204259.93299",
+      "modified": "1788204259.935996"
+    }
+  },
+  {
+    "document_id": "96bab57d-e37c-43bd-aaad-69b999aed7e4",
+    "filename": "96bab57d-e37c-43bd-aaad-69b999aed7e4.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data.",
+    "metadata": {
+      "size_bytes": "107",
+      "created": "1788204304.761028",
+      "modified": "1788204304.761028"
+    }
+  },
+  {
+    "document_id": "1ff9683c-6aa9-4e25-97ef-7b17790c9a68",
+    "filename": "1ff9683c-6aa9-4e25-97ef-7b17790c9a68.txt",
+    "file_type": "txt",
+    "text": "Machine learning allows computers to learn patterns from data without being explicitly programmed.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788204312.6872785",
+      "modified": "1788204312.6882796"
+    }
+  },
+  {
+    "document_id": "d5fd1989-2b45-4cad-b144-eb08553a692b",
+    "filename": "d5fd1989-2b45-4cad-b144-eb08553a692b.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1788205701.306334",
+      "modified": "1788205701.306334"
+    }
+  },
+  {
+    "document_id": "10b61fd1-910b-4aa8-b012-646be11831c8",
+    "filename": "10b61fd1-910b-4aa8-b012-646be11831c8.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788205709.1702056",
+      "modified": "1788205709.1702056"
+    }
+  },
+  {
+    "document_id": "dd9dc642-3b05-403a-8822-4c42e2940880",
+    "filename": "dd9dc642-3b05-403a-8822-4c42e2940880.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1788205717.4944015",
+      "modified": "1788205717.4954011"
+    }
+  },
+  {
+    "document_id": "ee2aac9b-fd3d-4ef8-a50d-511c0a881af3",
+    "filename": "ee2aac9b-fd3d-4ef8-a50d-511c0a881af3.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788205726.1040282",
+      "modified": "1788205726.1050184"
+    }
+  },
+  {
+    "document_id": "aea5e2ae-e48c-482c-bdf3-96ce181b1853",
+    "filename": "aea5e2ae-e48c-482c-bdf3-96ce181b1853.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788205733.1384807",
+      "modified": "1788205733.1414852"
+    }
+  },
+  {
+    "document_id": "74088bde-e776-49bf-a960-bcb566e5c911",
+    "filename": "74088bde-e776-49bf-a960-bcb566e5c911.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data.",
+    "metadata": {
+      "size_bytes": "107",
+      "created": "1788205784.5096507",
+      "modified": "1788205784.5106497"
+    }
+  },
+  {
+    "document_id": "c5a76d71-3ecd-439d-bb30-f6a2e3ec324d",
+    "filename": "c5a76d71-3ecd-439d-bb30-f6a2e3ec324d.txt",
+    "file_type": "txt",
+    "text": "Machine learning allows computers to learn patterns from data without being explicitly programmed.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788205792.343459",
+      "modified": "1788205792.343459"
+    }
   }
 ]
