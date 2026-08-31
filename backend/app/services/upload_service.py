@@ -8,6 +8,7 @@ from app.embeddings.embedding_service import EmbeddingService
 from app.schemas.vector_store_schema import VectorStoreSchema
 from app.vector_store.qdrant_store import QdrantVectorStore
 from app.vector_store.collection_config import LOCAL_COLLECTION_NAME
+from app.storage.document_registry import DocumentRegistry
 
 class UploadService:
     """
@@ -16,12 +17,11 @@ class UploadService:
 
     def __init__(self):
         self.storage = LocalStorage()
+        self.document_registry = DocumentRegistry()
         self.processing_service = DocumentProcessingService()
         self.chunking_service = ChunkingService()
         self.embedding_service = EmbeddingService()
-        self.vector_store = QdrantVectorStore(
-        collection_name=LOCAL_COLLECTION_NAME
-    )
+        self.vector_store = QdrantVectorStore(collection_name=LOCAL_COLLECTION_NAME)
 
     async def upload_file(self,file: UploadFile):
 
@@ -61,7 +61,8 @@ class UploadService:
                 )
             )
         self.vector_store.add(records)
-
+        self.document_registry.add(document)
+        
         # Step 5: Return complete response
         return UploadResponseSchema(
             filename=unique_filename,
