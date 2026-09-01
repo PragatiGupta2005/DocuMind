@@ -19,7 +19,6 @@ def create_test_chunk(
         }
     )
 
-
 def test_embed_single_chunk():
 
     service = EmbeddingService()
@@ -37,7 +36,6 @@ def test_embed_single_chunk():
 
     assert result.metadata["chunk_id"] == 1
     assert result.metadata["document_name"] == "AI.pdf"
-
 
 def test_embed_multiple_chunks():
     service = EmbeddingService()
@@ -173,3 +171,21 @@ def test_embedding_count_mismatch():
         match="Number of generated embeddings does not match"
     ):
         service.embed_chunks(chunks)
+
+def test_local_embedding_dimensions():
+    from app.embeddings.local_embedding import LocalEmbedding
+
+    embedding = LocalEmbedding()
+
+    assert embedding.get_dimensions() == 384
+
+def test_api_embedding_dimensions():
+    from app.embeddings.api_embedding import APIEmbedding
+
+    embedding = APIEmbedding.__new__(
+        APIEmbedding
+    )
+
+    embedding.model_name = "gemini-embedding-001"
+
+    assert embedding.get_dimensions() == 3072

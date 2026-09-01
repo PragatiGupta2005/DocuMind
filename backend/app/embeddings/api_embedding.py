@@ -1,5 +1,4 @@
 from google import genai
-from google.genai import types
 
 from app.embeddings.base_embedding import BaseEmbedding
 
@@ -84,3 +83,10 @@ class APIEmbedding(BaseEmbedding):
         """
 
         return self.model_name
+
+    def get_dimensions(self) -> int:
+        """
+        Return the dimensionality of the embedding vectors.
+        """
+
+        return 3072

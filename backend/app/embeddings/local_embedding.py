@@ -77,3 +77,10 @@ class LocalEmbedding(BaseEmbedding):
         """
 
         return self.model_name
+
+    def get_dimensions(self) -> int:
+        """
+        Return the dimensionality of the embedding vectors.
+        """
+
+        return 384

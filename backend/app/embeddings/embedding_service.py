@@ -53,7 +53,7 @@ class EmbeddingService:
             document_id=chunk.document_id,
             chunk_uuid=chunk.chunk_uuid,
             model_name=self.provider.get_model_name(),
-            dimensions=len(vector),
+            dimensions=self.provider.get_dimensions(),
             vector=vector,
             metadata=metadata
         )
@@ -99,7 +99,7 @@ class EmbeddingService:
                 document_id=chunk.document_id,
                 chunk_uuid=chunk.chunk_uuid,
                 model_name=self.provider.get_model_name(),
-                dimensions=len(vector),
+                dimensions=self.provider.get_dimensions(),
                 vector=vector,
                 metadata=metadata
             )

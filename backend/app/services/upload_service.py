@@ -71,7 +71,7 @@ class UploadService:
             size=file.size,
             content_type=file.content_type,
             storage_path=storage_path,
-            message="File uploaded, processed, and chunked successfully",
+            message="File uploaded, processed, chunked, embedded, and indexed successfully",
             document=document,
             chunks=chunks,
             chunk_count=len(chunks)

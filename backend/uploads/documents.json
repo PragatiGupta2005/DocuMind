@@ -390,5 +390,89 @@
       "modified": "1788207367.5159283",
       "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-18\\test_uploaded_document_is_sema0\\7e0eaae9-d29e-4128-8223-d01f87bf8f8a.txt"
     }
+  },
+  {
+    "document_id": "9a27aef7-ce61-4fe8-9863-6fc8ff02bcfb",
+    "filename": "9a27aef7-ce61-4fe8-9863-6fc8ff02bcfb.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1788251334.2874117",
+      "modified": "1788251334.2971134",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_txt_upload_processes_and_0\\9a27aef7-ce61-4fe8-9863-6fc8ff02bcfb.txt"
+    }
+  },
+  {
+    "document_id": "f5d043c7-138e-4807-9fd5-4b38f35956f2",
+    "filename": "f5d043c7-138e-4807-9fd5-4b38f35956f2.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788251342.3987",
+      "modified": "1788251342.3987",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_txt_upload_preserves_docu0\\f5d043c7-138e-4807-9fd5-4b38f35956f2.txt"
+    }
+  },
+  {
+    "document_id": "7c97d4fe-9586-4212-95b2-e697540321e3",
+    "filename": "7c97d4fe-9586-4212-95b2-e697540321e3.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1788251350.438723",
+      "modified": "1788251350.438723",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_txt_upload_generates_chun0\\7c97d4fe-9586-4212-95b2-e697540321e3.txt"
+    }
+  },
+  {
+    "document_id": "9d5beba0-0efe-4024-bd0b-0223af8c94d8",
+    "filename": "9d5beba0-0efe-4024-bd0b-0223af8c94d8.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788251358.4848106",
+      "modified": "1788251358.4869177",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_upload_creates_unique_doc0\\9d5beba0-0efe-4024-bd0b-0223af8c94d8.txt"
+    }
+  },
+  {
+    "document_id": "4829df4f-3258-4f4b-8b5c-aaf61dd9111b",
+    "filename": "4829df4f-3258-4f4b-8b5c-aaf61dd9111b.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1788251366.1468701",
+      "modified": "1788251366.1468701",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_upload_creates_unique_doc0\\4829df4f-3258-4f4b-8b5c-aaf61dd9111b.txt"
+    }
+  },
+  {
+    "document_id": "c5e86318-3cc7-4071-b17b-9d58b923c1c6",
+    "filename": "c5e86318-3cc7-4071-b17b-9d58b923c1c6.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data.",
+    "metadata": {
+      "size_bytes": "107",
+      "created": "1788251434.0446432",
+      "modified": "1788251434.092644",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_upload_indexes_document_i0\\c5e86318-3cc7-4071-b17b-9d58b923c1c6.txt"
+    }
+  },
+  {
+    "document_id": "efa1eb00-4911-4aac-97e7-d73ec271fe2d",
+    "filename": "efa1eb00-4911-4aac-97e7-d73ec271fe2d.txt",
+    "file_type": "txt",
+    "text": "Machine learning allows computers to learn patterns from data without being explicitly programmed.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1788251445.1451128",
+      "modified": "1788251445.1451128",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-22\\test_uploaded_document_is_sema0\\efa1eb00-4911-4aac-97e7-d73ec271fe2d.txt"
+    }
   }
 ]

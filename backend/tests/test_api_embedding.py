@@ -1,74 +1,88 @@
+from unittest.mock import MagicMock
+
 from app.embeddings.api_embedding import APIEmbedding
 
 
-embedding = APIEmbedding()
+def test_api_embedding_model_name():
+    embedding = APIEmbedding.__new__(
+        APIEmbedding
+    )
+
+    embedding.model_name = "gemini-embedding-001"
+
+    assert (
+        embedding.get_model_name()
+        == "gemini-embedding-001"
+    )
 
 
-print("===================================")
-print("API Embedding Provider Test")
-print("===================================")
+def test_api_embedding_single(monkeypatch):
+    embedding = APIEmbedding.__new__(
+        APIEmbedding
+    )
 
-print(
-    "Model:",
-    embedding.get_model_name()
-)
+    embedding.model_name = "gemini-embedding-001"
 
+    fake_vector = [0.1] * 3072
 
-# -----------------------------------
-# Single embedding
-# -----------------------------------
+    fake_response = MagicMock()
+    fake_response.embeddings = [
+        MagicMock(values=fake_vector)
+    ]
 
-text = (
-    "Machine Learning is a subset "
-    "of Artificial Intelligence."
-)
+    embedding.client = MagicMock()
 
-vector = embedding.embed(text)
+    embedding.client.models.embed_content.return_value = (
+        fake_response
+    )
 
+    vector = embedding.embed(
+        "Machine Learning is a subset of Artificial Intelligence."
+    )
 
-print(
-    "Vector Type:",
-    type(vector)
-)
+    assert isinstance(vector, list)
 
-print(
-    "Vector Dimensions:",
-    len(vector)
-)
+    assert len(vector) == 3072
 
-print(
-    "First 5 Values:",
-    vector[:5]
-)
+    embedding.client.models.embed_content.assert_called_once()
 
 
-# -----------------------------------
-# Batch embedding
-# -----------------------------------
+def test_api_embedding_batch(monkeypatch):
+    embedding = APIEmbedding.__new__(
+        APIEmbedding
+    )
 
-texts = [
-    "Artificial Intelligence is a field of computer science.",
-    "Machine Learning allows systems to learn from data.",
-    "Deep Learning uses neural networks."
-]
+    embedding.model_name = "gemini-embedding-001"
 
-vectors = embedding.embed_batch(texts)
+    texts = [
+        "Artificial Intelligence is a field of computer science.",
+        "Machine Learning allows systems to learn from data.",
+        "Deep Learning uses neural networks.",
+    ]
 
+    fake_response = MagicMock()
 
-print(
-    "Number of Input Texts:",
-    len(texts)
-)
+    fake_response.embeddings = [
+        MagicMock(values=[0.1] * 3072),
+        MagicMock(values=[0.2] * 3072),
+        MagicMock(values=[0.3] * 3072),
+    ]
 
-print(
-    "Number of Generated Vectors:",
-    len(vectors)
-)
+    embedding.client = MagicMock()
 
-print(
-    "Batch Vector Dimensions:",
-    len(vectors[0])
-)
+    embedding.client.models.embed_content.return_value = (
+        fake_response
+    )
 
+    vectors = embedding.embed_batch(texts)
 
-print("===================================")
+    assert isinstance(vectors, list)
+
+    assert len(vectors) == len(texts)
+
+    assert all(
+        len(vector) == 3072
+        for vector in vectors
+    )
+
+    embedding.client.models.embed_content.assert_called_once()
