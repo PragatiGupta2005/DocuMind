@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class RAGRequest(BaseModel):
@@ -10,12 +10,14 @@ class RAGRequest(BaseModel):
 
     query: str = Field(
         ...,
+        min_length=1,
         description="User question or information request",
     )
 
     top_k: int = Field(
         default=5,
         ge=1,
+        le=20,
         description="Number of relevant chunks to retrieve",
     )
 
@@ -23,6 +25,14 @@ class RAGRequest(BaseModel):
         default=None,
         description="Optional document ID used to restrict retrieval",
     )
+
+    @field_validator("query")
+    @classmethod
+    def validate_query(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("Query cannot be empty.")
+
+        return value
 
 
 class SourceReference(BaseModel):
