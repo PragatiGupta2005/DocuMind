@@ -1,5 +1,4 @@
 import pytest
-
 from app.rag.rag_service import RAGService
 from app.schemas.rag_context_schema import (
     ContextChunk,
@@ -17,6 +16,9 @@ class FakeRetrievalService:
 
     def __init__(self):
         self.called = False
+        self.received_query = None
+        self.received_top_k = None
+        self.received_document_id = None
 
     def retrieve(
         self,
@@ -26,6 +28,9 @@ class FakeRetrievalService:
     ):
 
         self.called = True
+        self.received_query = query
+        self.received_top_k = top_k
+        self.received_document_id = document_id
 
         return [
             SearchResultSchema(
@@ -39,7 +44,6 @@ class FakeRetrievalService:
                 },
             )
         ]
-
 
 class FakeContextBuilder:
 
@@ -278,23 +282,13 @@ def test_rag_service_returns_model_metadata():
     )
 
 
-def test_rag_service_rejects_empty_query():
-
-    (
-        service,
-        _,
-        _,
-        _,
-        _,
-    ) = create_service()
-
-    request = RAGRequest(
-        query="   "
-    )
+def test_rag_request_rejects_empty_query():
 
     with pytest.raises(ValueError):
 
-        service.generate(request)
+        RAGRequest(
+            query="   "
+        )
 
 def test_rag_service_returns_multiple_sources():
 
@@ -336,3 +330,39 @@ def test_source_contains_retrieval_score():
     source = response.sources[0]
 
     assert source.score == 0.95
+
+def test_rag_service_passes_retrieval_parameters():
+
+    (
+        service,
+        retrieval_service,
+        _,
+        _,
+        _,
+    ) = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?",
+        top_k=3,
+        document_id="doc-123",
+    )
+
+    service.generate(request)
+
+    assert retrieval_service.called is True
+
+    assert (
+        retrieval_service.received_query
+        == "What is machine learning?"
+    )
+
+    assert (
+        retrieval_service.received_top_k
+        == 3
+    )
+
+    assert (
+        retrieval_service.received_document_id
+        == "doc-123"
+    )
+
