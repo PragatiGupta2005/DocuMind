@@ -1,16 +1,7 @@
 import pytest
-
 from app.rag.rag_service import RAGService
-
-from app.schemas.rag_context_schema import (
-    ContextChunk,
-    RAGContext,
-)
-
-from app.schemas.rag_schema import (
-    RAGRequest,
-)
-
+from app.schemas.rag_context_schema import (ContextChunk,RAGContext)
+from app.schemas.rag_schema import (RAGRequest,)
 from app.schemas.search_result_schema import (
     SearchResultSchema,
 )
@@ -145,26 +136,21 @@ class FakePromptBuilder:
 # ============================================================
 
 class FakeLLMService:
-
     def __init__(self):
-
         self.called = False
         self.received_prompt = None
 
     def generate(self, prompt):
-
         self.called = True
         self.received_prompt = prompt
-
         return (
             "Machine learning enables systems "
             "to learn patterns from data."
         )
 
     def get_model_name(self):
-
         return "fake-llm"
-
+    
 
 # ============================================================
 # Service Factory
@@ -537,4 +523,22 @@ def test_rag_service_handles_no_retrieval_results():
     assert (
         response.metadata["retrieved_chunks"]
         == 0
+    )
+
+def test_rag_service_passes_generated_prompt_to_llm():
+    service, _, _, prompt_builder, llm_service = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    assert llm_service.called is True
+    assert llm_service.received_prompt is not None
+    assert "What is machine learning?" in llm_service.received_prompt
+    assert (
+        response.answer
+        == "Machine learning enables systems "
+        "to learn patterns from data."
     )
