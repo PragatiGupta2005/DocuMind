@@ -582,5 +582,77 @@
       "modified": "1789157923.9867218",
       "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-25\\test_uploaded_document_is_sema0\\7cb6e8d2-dc43-41c7-9b1b-d2a6ecc01855.txt"
     }
+  },
+  {
+    "document_id": "d6dbb329-713a-4511-8065-d3d98b3f06d6",
+    "filename": "d6dbb329-713a-4511-8065-d3d98b3f06d6.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data. These systems can use learned patterns to make predictions.",
+    "metadata": {
+      "size_bytes": "167",
+      "created": "1789159398.8690405",
+      "modified": "1789159398.8690405",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-26\\test_upload_index_query_end_to0\\d6dbb329-713a-4511-8065-d3d98b3f06d6.txt"
+    }
+  },
+  {
+    "document_id": "93843a6e-b9fd-43a8-8151-e0ed701a32e7",
+    "filename": "93843a6e-b9fd-43a8-8151-e0ed701a32e7.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence enables computers to perform tasks that normally require human intelligence. Machine learning is a branch of artificial intelligence that learns patterns from data.",
+    "metadata": {
+      "size_bytes": "188",
+      "created": "1789159802.369375",
+      "modified": "1789159802.3703737",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-27\\test_query_retrieval_to_contex0\\93843a6e-b9fd-43a8-8151-e0ed701a32e7.txt"
+    }
+  },
+  {
+    "document_id": "908ee970-cc70-4d7a-9c8b-8f561e6a760f",
+    "filename": "908ee970-cc70-4d7a-9c8b-8f561e6a760f.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence enables computers to perform tasks that normally require human intelligence. Machine learning is a branch of artificial intelligence that learns patterns from data.",
+    "metadata": {
+      "size_bytes": "188",
+      "created": "1789160238.6294742",
+      "modified": "1789160238.6294742",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-28\\test_query_retrieval_to_contex0\\908ee970-cc70-4d7a-9c8b-8f561e6a760f.txt"
+    }
+  },
+  {
+    "document_id": "43fdda4c-e4ba-43dd-b539-34b43afb7904",
+    "filename": "43fdda4c-e4ba-43dd-b539-34b43afb7904.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data. These systems can use learned patterns to make predictions.",
+    "metadata": {
+      "size_bytes": "167",
+      "created": "1789160968.1665041",
+      "modified": "1789160968.1675017",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-29\\test_upload_index_query_end_to0\\43fdda4c-e4ba-43dd-b539-34b43afb7904.txt"
+    }
+  },
+  {
+    "document_id": "6961d07a-3199-4b66-a9e8-3f19cc0155bf",
+    "filename": "6961d07a-3199-4b66-a9e8-3f19cc0155bf.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data. These systems can use learned patterns to make predictions.",
+    "metadata": {
+      "size_bytes": "167",
+      "created": "1789161158.597962",
+      "modified": "1789161158.598961",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-30\\test_upload_index_query_end_to0\\6961d07a-3199-4b66-a9e8-3f19cc0155bf.txt"
+    }
+  },
+  {
+    "document_id": "b46ebe31-0d06-4157-93b7-6320ad4b72c8",
+    "filename": "b46ebe31-0d06-4157-93b7-6320ad4b72c8.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence enables computers to perform tasks that normally require human intelligence. Machine learning is a branch of artificial intelligence that learns patterns from data.",
+    "metadata": {
+      "size_bytes": "188",
+      "created": "1789161175.8369823",
+      "modified": "1789161175.8369823",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-30\\test_query_retrieval_to_contex0\\b46ebe31-0d06-4157-93b7-6320ad4b72c8.txt"
+    }
   }
 ]
