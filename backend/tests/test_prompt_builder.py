@@ -1,11 +1,8 @@
 import pytest
-
 from app.rag.prompt_builder import PromptBuilder
-from app.schemas.rag_context_schema import (
-    ContextChunk,
-    RAGContext,
-)
-
+from app.schemas.rag_context_schema import (ContextChunk,RAGContext)
+from app.rag.context_builder import ContextBuilder
+from app.schemas.search_result_schema import SearchResultSchema
 
 def create_context():
     chunk = ContextChunk(
@@ -165,4 +162,37 @@ def test_prompt_builder_has_answer_section():
         context=context,
     )
 
+    assert "ANSWER" in prompt
+
+def test_context_to_prompt_integration():
+    context_builder = ContextBuilder()
+    prompt_builder = PromptBuilder()
+
+    results = [
+        SearchResultSchema(
+            point_id="point-001",
+            score=0.95,
+            payload={
+                "document_id": "doc-001",
+                "document_name": "test.pdf",
+                "chunk_id": 1,
+                "text": "Machine learning learns patterns from data.",
+            },
+        )
+    ]
+
+    context = context_builder.build(results)
+
+    prompt = prompt_builder.build(
+        query="What is machine learning?",
+        context=context,
+    )
+
+    assert "What is machine learning?" in prompt
+    assert "test.pdf" in prompt
+    assert "doc-001" in prompt
+    assert "Chunk ID: 1" in prompt
+    assert "Relevance Score: 0.9500" in prompt
+    assert "Machine learning learns patterns from data." in prompt
+    assert "provided context" in prompt
     assert "ANSWER" in prompt
