@@ -45,3 +45,13 @@ def test_rag_query_top_k_too_large():
     )
 
     assert response.status_code == 422
+
+def test_rag_query_whitespace_only_query():
+    response = client.post(
+        "/rag/query",
+        json={
+            "query": "   ",
+        },
+    )
+
+    assert response.status_code == 422
