@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-
 from app.main import app
-
+from unittest.mock import patch
+from app.rag.rag_service import RAGService
 
 client = TestClient(app)
 
@@ -55,3 +55,23 @@ def test_rag_query_whitespace_only_query():
     )
 
     assert response.status_code == 422
+
+def test_rag_query_retrieval_failure():
+    with patch(
+        "app.api.rag.create_rag_service"
+    ) as mock_create_service:
+
+        mock_service = mock_create_service.return_value
+
+        mock_service.generate.side_effect = RuntimeError(
+            "Retrieval service failed"
+        )
+
+        response = client.post(
+            "/rag/query",
+            json={
+                "query": "What is RAG?",
+            },
+        )
+
+    assert response.status_code == 500  

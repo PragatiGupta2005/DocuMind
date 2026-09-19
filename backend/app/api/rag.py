@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-
+from fastapi import APIRouter, HTTPException
 from app.embeddings.embedding_service import EmbeddingService
 from app.rag.context_builder import ContextBuilder
 from app.rag.prompt_builder import PromptBuilder
@@ -58,4 +57,11 @@ async def query(request: RAGRequest):
 
     rag_service = create_rag_service()
 
-    return rag_service.generate(request)
+    try:
+        return rag_service.generate(request)
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to retrieve relevant document context.",
+        ) from exc
