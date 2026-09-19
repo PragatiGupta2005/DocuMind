@@ -236,4 +236,57 @@ def test_semantic_retrieval_with_paraphrased_query(
         for text in texts
     )
 
-    
+def test_retrieval_score_analysis(
+    test_collection,
+):
+    """
+    Analyze similarity scores returned for
+    relevant and unrelated document chunks.
+    """
+
+    retrieval_service = setup_retrieval_system(
+        test_collection
+    )
+
+    results = retrieval_service.retrieve(
+        query="What is machine learning?",
+        top_k=4,
+    )
+
+    assert len(results) == 4
+
+    print("\nRetrieval Score Analysis")
+    print("=" * 60)
+
+    for rank, result in enumerate(
+        results,
+        start=1,
+    ):
+        print(
+            f"Rank {rank} | "
+            f"Score: {result.score:.4f} | "
+            f"Document: "
+            f"{result.payload['document_name']} | "
+            f"Chunk: {result.payload['chunk_id']}"
+        )
+
+        print(
+            f"Text: {result.payload['text']}"
+        )
+
+        print("-" * 60)
+
+    scores = [
+        result.score
+        for result in results
+    ]
+
+    assert all(
+        isinstance(score, float)
+        for score in scores
+    )
+
+    assert scores == sorted(
+        scores,
+        reverse=True,
+    )
