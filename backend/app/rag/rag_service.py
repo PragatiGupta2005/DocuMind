@@ -7,7 +7,10 @@ from app.schemas.rag_schema import (
 )
 from app.services.retrieval_service import RetrievalService
 from app.llm.llm_service import LLMService
-
+from app.exceptions.rag_exceptions import (
+    RetrievalError,
+    LLMError,
+)
 
 class RAGService:
     """
@@ -44,11 +47,14 @@ class RAGService:
         # 1. Retrieve relevant chunks
         # --------------------------------------------------
 
-        results = self.retrieval_service.retrieve(
-            query=request.query,
-            top_k=request.top_k,
-            document_id=request.document_id,
-        )
+        try:
+            results = self.retrieval_service.retrieve(
+                query=request.query,
+                top_k=request.top_k,
+                document_id=request.document_id,
+            )
+        except Exception as exc:
+            raise RetrievalError() from exc
 
         # --------------------------------------------------
         # 2. Build context
@@ -71,9 +77,10 @@ class RAGService:
         # 4. Generate answer
         # --------------------------------------------------
 
-        answer = self.llm_service.generate(
-            prompt
-        )
+        try:
+            answer = self.llm_service.generate(prompt)
+        except Exception as exc:
+            raise LLMError() from exc
 
         # --------------------------------------------------
         # 5. Build source references

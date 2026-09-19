@@ -1,4 +1,8 @@
 from fastapi import APIRouter, HTTPException
+from app.exceptions.rag_exceptions import (
+    RetrievalError,
+    LLMError,
+)
 from app.embeddings.embedding_service import EmbeddingService
 from app.rag.context_builder import ContextBuilder
 from app.rag.prompt_builder import PromptBuilder
@@ -60,8 +64,14 @@ async def query(request: RAGRequest):
     try:
         return rag_service.generate(request)
 
-    except Exception as exc:
+    except RetrievalError as exc:
         raise HTTPException(
             status_code=500,
             detail="Failed to retrieve relevant document context.",
+        ) from exc
+
+    except LLMError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate a response from the language model.",
         ) from exc

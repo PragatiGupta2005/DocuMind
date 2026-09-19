@@ -2,7 +2,10 @@ from fastapi.testclient import TestClient
 from app.main import app
 from unittest.mock import patch
 from app.rag.rag_service import RAGService
-
+from app.exceptions.rag_exceptions import (
+    LLMError,
+    RetrievalError,
+)
 client = TestClient(app)
 
 
@@ -63,7 +66,7 @@ def test_rag_query_retrieval_failure():
 
         mock_service = mock_create_service.return_value
 
-        mock_service.generate.side_effect = RuntimeError(
+        mock_service.generate.side_effect = RetrievalError(
             "Retrieval service failed"
         )
 
@@ -74,4 +77,30 @@ def test_rag_query_retrieval_failure():
             },
         )
 
-    assert response.status_code == 500  
+    assert response.status_code == 500
+    assert response.json() == {
+        "detail": "Failed to retrieve relevant document context."
+    }  
+
+def test_rag_query_llm_failure():
+    with patch(
+        "app.api.rag.create_rag_service"
+    ) as mock_create_service:
+
+        mock_service = mock_create_service.return_value
+
+        mock_service.generate.side_effect = LLMError(
+            "LLM provider failed"
+        )
+
+        response = client.post(
+            "/rag/query",
+            json={
+                "query": "What is machine learning?",
+            },
+        )
+
+    assert response.status_code == 500
+    assert response.json() == {
+        "detail": "Failed to generate a response from the language model."
+    }
