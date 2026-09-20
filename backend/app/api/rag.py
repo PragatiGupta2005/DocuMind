@@ -12,7 +12,7 @@ from app.services.retrieval_service import RetrievalService
 from app.vector_store.collection_config import LOCAL_COLLECTION_NAME
 from app.vector_store.qdrant_store import QdrantVectorStore
 from app.llm.llm_service import LLMService
-
+from app.rag.answer_validator import AnswerValidator
 
 router = APIRouter(
     prefix="/rag",
@@ -37,16 +37,16 @@ def create_rag_service() -> RAGService:
     )
 
     context_builder = ContextBuilder()
-
     prompt_builder = PromptBuilder()
-
     llm_service = LLMService()
-
+    answer_validator = AnswerValidator()
+    
     return RAGService(
         retrieval_service=retrieval_service,
         context_builder=context_builder,
         prompt_builder=prompt_builder,
         llm_service=llm_service,
+        answer_validator=answer_validator,
     )
 
 

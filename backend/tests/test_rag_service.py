@@ -1,10 +1,10 @@
 import pytest
+
 from app.rag.rag_service import RAGService
-from app.schemas.rag_context_schema import (ContextChunk,RAGContext)
-from app.schemas.rag_schema import (RAGRequest,)
-from app.schemas.search_result_schema import (
-    SearchResultSchema,
-)
+from app.schemas.rag_context_schema import ContextChunk, RAGContext
+from app.schemas.rag_schema import RAGRequest
+from app.schemas.search_result_schema import SearchResultSchema
+from app.schemas.answer_validation_schema import AnswerValidationResult
 
 
 # ============================================================
@@ -14,7 +14,6 @@ from app.schemas.search_result_schema import (
 class FakeRetrievalService:
 
     def __init__(self, results=None):
-
         self.called = False
         self.received_query = None
         self.received_top_k = None
@@ -64,7 +63,6 @@ class FakeRetrievalService:
 class FakeContextBuilder:
 
     def __init__(self):
-
         self.called = False
         self.received_results = None
 
@@ -75,7 +73,6 @@ class FakeContextBuilder:
 
         # No retrieval results
         if not results:
-
             return RAGContext(
                 chunks=[],
                 formatted_context="",
@@ -109,7 +106,6 @@ class FakeContextBuilder:
 class FakePromptBuilder:
 
     def __init__(self):
-
         self.called = False
         self.received_query = None
         self.received_context = None
@@ -136,6 +132,7 @@ class FakePromptBuilder:
 # ============================================================
 
 class FakeLLMService:
+
     def __init__(self):
         self.called = False
         self.received_prompt = None
@@ -143,6 +140,7 @@ class FakeLLMService:
     def generate(self, prompt):
         self.called = True
         self.received_prompt = prompt
+
         return (
             "Machine learning enables systems "
             "to learn patterns from data."
@@ -150,7 +148,30 @@ class FakeLLMService:
 
     def get_model_name(self):
         return "fake-llm"
-    
+
+
+# ============================================================
+# Fake Answer Validator
+# ============================================================
+
+class FakeAnswerValidator:
+
+    def __init__(self):
+        self.called = False
+        self.received_answer = None
+        self.received_context = None
+
+    def validate(self, answer, context):
+
+        self.called = True
+        self.received_answer = answer
+        self.received_context = context
+
+        return AnswerValidationResult(
+            is_grounded=True,
+            reason="Test answer is grounded.",
+        )
+
 
 # ============================================================
 # Service Factory
@@ -166,11 +187,14 @@ def create_service():
 
     llm_service = FakeLLMService()
 
+    answer_validator = FakeAnswerValidator()
+
     service = RAGService(
         retrieval_service=retrieval_service,
         context_builder=context_builder,
         prompt_builder=prompt_builder,
         llm_service=llm_service,
+        answer_validator=answer_validator,
     )
 
     return (
@@ -338,6 +362,30 @@ def test_rag_service_returns_model_metadata():
     )
 
 
+def test_rag_service_returns_grounding_metadata():
+
+    (
+        service,
+        _,
+        _,
+        _,
+        _,
+    ) = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    assert response.metadata["is_grounded"] is True
+
+    assert (
+        response.metadata["grounding_reason"]
+        == "Test answer is grounded."
+    )
+
+
 def test_rag_request_rejects_empty_query():
 
     with pytest.raises(ValueError):
@@ -376,6 +424,7 @@ def test_sources_preserve_context_order():
     response = service.generate(request)
 
     assert response.sources[0].chunk_id == 1
+
     assert (
         response.sources[0].document_name
         == "test.pdf"
@@ -450,11 +499,14 @@ def test_rag_service_handles_no_retrieval_results():
 
     llm_service = FakeLLMService()
 
+    answer_validator = FakeAnswerValidator()
+
     service = RAGService(
         retrieval_service=retrieval_service,
         context_builder=context_builder,
         prompt_builder=prompt_builder,
         llm_service=llm_service,
+        answer_validator=answer_validator,
     )
 
     request = RAGRequest(
@@ -525,8 +577,21 @@ def test_rag_service_handles_no_retrieval_results():
         == 0
     )
 
+    # --------------------------------------------------------
+    # 8. Grounding metadata
+    # --------------------------------------------------------
+
+    assert response.metadata["is_grounded"] is True
+
+    assert (
+        response.metadata["grounding_reason"]
+        == "Test answer is grounded."
+    )
+
+
 def test_rag_service_passes_generated_prompt_to_llm():
-    service, _, _, prompt_builder, llm_service = create_service()
+
+    service, _, _, _, llm_service = create_service()
 
     request = RAGRequest(
         query="What is machine learning?"
@@ -535,8 +600,14 @@ def test_rag_service_passes_generated_prompt_to_llm():
     response = service.generate(request)
 
     assert llm_service.called is True
+
     assert llm_service.received_prompt is not None
-    assert "What is machine learning?" in llm_service.received_prompt
+
+    assert (
+        "What is machine learning?"
+        in llm_service.received_prompt
+    )
+
     assert (
         response.answer
         == "Machine learning enables systems "

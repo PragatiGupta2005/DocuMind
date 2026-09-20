@@ -11,6 +11,7 @@ from app.exceptions.rag_exceptions import (
     RetrievalError,
     LLMError,
 )
+from app.rag.answer_validator import AnswerValidator
 
 class RAGService:
     """
@@ -19,16 +20,18 @@ class RAGService:
     """
 
     def __init__(
-        self,
-        retrieval_service: RetrievalService,
-        context_builder: ContextBuilder,
-        prompt_builder: PromptBuilder,
-        llm_service: LLMService,
+    self,
+    retrieval_service,
+    context_builder,
+    prompt_builder,
+    llm_service,
+    answer_validator,
     ):
         self.retrieval_service = retrieval_service
         self.context_builder = context_builder
         self.prompt_builder = prompt_builder
         self.llm_service = llm_service
+        self.answer_validator = answer_validator
 
     def generate(
         self,
@@ -81,6 +84,24 @@ class RAGService:
             answer = self.llm_service.generate(prompt)
         except Exception as exc:
             raise LLMError() from exc
+
+        validation = self.answer_validator.validate(
+            answer=answer,
+            context=context,
+        )
+
+        sources = self._build_sources(context)
+
+        return RAGResponse(
+            answer=answer,
+            sources=sources,
+            metadata={
+                "model_name": self.llm_service.get_model_name(),
+                "retrieved_chunks": len(context.chunks),
+                "is_grounded": validation.is_grounded,
+                "grounding_reason": validation.reason,
+            },
+        )
 
         # --------------------------------------------------
         # 5. Build source references
