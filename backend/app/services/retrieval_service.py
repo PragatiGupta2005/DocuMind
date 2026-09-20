@@ -1,7 +1,7 @@
 from app.embeddings.embedding_service import EmbeddingService
 from app.schemas.search_result_schema import SearchResultSchema
 from app.vector_store.qdrant_store import QdrantVectorStore
-
+from app.core.settings import MIN_RELEVANCE_SCORE
 
 class RetrievalService:
     """
@@ -40,8 +40,14 @@ class RetrievalService:
             self.embedding_service.embed_text(query)
         )
 
-        return self.vector_store.search(
+        results = self.vector_store.search(
             query_vector=query_vector,
             top_k=top_k,
             document_id=document_id,
         )
+
+        return [
+            result
+            for result in results
+            if result.score >= MIN_RELEVANCE_SCORE
+        ]

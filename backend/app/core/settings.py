@@ -62,3 +62,7 @@ LLM_MODEL = os.getenv(
     "LLM_MODEL",
     "gemini-2.5-flash"
 )
+
+MIN_RELEVANCE_SCORE = float(
+    os.getenv("MIN_RELEVANCE_SCORE", "0.5")
+)

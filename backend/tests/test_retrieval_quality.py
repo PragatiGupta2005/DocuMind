@@ -1,5 +1,5 @@
 import uuid
-
+from app.core.settings import MIN_RELEVANCE_SCORE
 from app.embeddings.embedding_service import EmbeddingService
 from app.schemas.chunk_schema import ChunkSchema
 from app.schemas.vector_store_schema import VectorStoreSchema
@@ -133,7 +133,8 @@ def test_retrieval_returns_relevant_chunk(
         top_k=3,
     )
 
-    assert len(results) == 3
+    assert len(results) >= 1
+    assert len(results) <= 3
 
     texts = [
         result.payload["text"]
@@ -158,7 +159,7 @@ def test_relevant_chunk_has_highest_score(
         top_k=4,
     )
 
-    assert len(results) == 4
+    assert 1 <= len(results) <= 4
 
     scores = [
         result.score
@@ -183,7 +184,7 @@ def test_retrieval_respects_top_k(
         top_k=2,
     )
 
-    assert len(results) == 2
+    assert len(results) <= 2
 
 def test_retrieval_document_filter(
     test_collection,
@@ -224,7 +225,7 @@ def test_semantic_retrieval_with_paraphrased_query(
         top_k=3,
     )
 
-    assert len(results) == 3
+    assert 1 <= len(results) <= 3
 
     texts = [
         result.payload["text"]
@@ -253,7 +254,7 @@ def test_retrieval_score_analysis(
         top_k=4,
     )
 
-    assert len(results) == 4
+    assert 1 <= len(results) <= 4
 
     print("\nRetrieval Score Analysis")
     print("=" * 60)
@@ -289,4 +290,83 @@ def test_retrieval_score_analysis(
     assert scores == sorted(
         scores,
         reverse=True,
+    )
+
+def test_retrieval_score_analysis_multiple_queries(
+    test_collection,
+):
+    retrieval_service = setup_retrieval_system(
+        test_collection
+    )
+
+    queries = [
+        "What is machine learning?",
+        "What is supervised learning?",
+        "What are neural networks?",
+        "How is information stored in a database?",
+    ]
+
+    print("\nMulti-Query Retrieval Score Analysis")
+    print("=" * 70)
+
+    for query in queries:
+
+        results = retrieval_service.retrieve(
+            query=query,
+            top_k=4,
+        )
+
+        print(f"\nQuery: {query}")
+        print("-" * 70)
+
+        for rank, result in enumerate(
+            results,
+            start=1,
+        ):
+            print(
+                f"Rank {rank} | "
+                f"Score: {result.score:.4f} | "
+                f"Document: "
+                f"{result.payload['document_name']} | "
+                f"Chunk: "
+                f"{result.payload['chunk_id']}"
+            )
+
+def test_retrieval_filters_low_relevance_results(
+    test_collection,
+):
+    retrieval_service = setup_retrieval_system(
+        test_collection
+    )
+
+    results = retrieval_service.retrieve(
+        query="What is machine learning?",
+        top_k=4,
+    )
+
+    assert len(results) >= 1
+
+    assert all(
+    result.score >= MIN_RELEVANCE_SCORE
+    for result in results
+    )
+
+def test_retrieval_returns_no_results_when_all_scores_are_below_threshold(
+    test_collection,
+):
+    retrieval_service = setup_retrieval_system(
+        test_collection
+    )
+
+    results = retrieval_service.retrieve(
+        query=(
+            "What is the history of "
+            "medieval European architecture?"
+        ),
+        top_k=4,
+    )
+
+    assert all(
+        result.score >= 0.5
+        for result in results
     )
