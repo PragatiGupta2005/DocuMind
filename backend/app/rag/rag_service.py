@@ -63,9 +63,18 @@ class RAGService:
         # 2. Build context
         # --------------------------------------------------
 
-        context = self.context_builder.build(
-            results
-        )
+        context = self.context_builder.build(results)
+        if not context.chunks:
+            return RAGResponse(
+                answer="I couldn't find relevant information in the provided documents.",
+                sources=[],
+                metadata={
+                    "model_name": self.llm_service.get_model_name(),
+                    "retrieved_chunks": 0,
+                    "is_grounded": False,
+                    "grounding_reason": "No retrieved context is available.",
+                },
+            )
 
         # --------------------------------------------------
         # 3. Build LLM prompt

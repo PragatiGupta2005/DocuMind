@@ -522,7 +522,7 @@ def test_rag_service_handles_no_retrieval_results():
     assert retrieval_service.called is True
 
     # --------------------------------------------------------
-    # 2. Retrieval actually returned no results
+    # 2. Retrieval returned no results
     # --------------------------------------------------------
 
     assert (
@@ -531,45 +531,43 @@ def test_rag_service_handles_no_retrieval_results():
     )
 
     # --------------------------------------------------------
-    # 3. Context builder produced empty context
+    # 3. Context builder was called
     # --------------------------------------------------------
 
     assert context_builder.called is True
 
-    assert (
-        prompt_builder.received_context.chunks
-        == []
-    )
-
-    assert (
-        prompt_builder.received_context.formatted_context
-        == ""
-    )
-
     # --------------------------------------------------------
-    # 4. LLM was still called
+    # 4. Prompt builder should NOT be called
     # --------------------------------------------------------
 
-    assert llm_service.called is True
+    assert prompt_builder.called is False
+
+    assert prompt_builder.received_context is None
 
     # --------------------------------------------------------
-    # 5. RAG still returns an answer
+    # 5. LLM should NOT be called
+    # --------------------------------------------------------
+
+    assert llm_service.called is False
+
+    # --------------------------------------------------------
+    # 6. Controlled no-context answer
     # --------------------------------------------------------
 
     assert (
         response.answer
-        == "Machine learning enables systems "
-        "to learn patterns from data."
+        == "I couldn't find relevant information "
+        "in the provided documents."
     )
 
     # --------------------------------------------------------
-    # 6. There should be no sources
+    # 7. There should be no sources
     # --------------------------------------------------------
 
     assert response.sources == []
 
     # --------------------------------------------------------
-    # 7. Metadata should report zero retrieved chunks
+    # 8. Metadata should report zero retrieved chunks
     # --------------------------------------------------------
 
     assert (
@@ -578,14 +576,14 @@ def test_rag_service_handles_no_retrieval_results():
     )
 
     # --------------------------------------------------------
-    # 8. Grounding metadata
+    # 9. Answer should NOT be considered grounded
     # --------------------------------------------------------
 
-    assert response.metadata["is_grounded"] is True
+    assert response.metadata["is_grounded"] is False
 
     assert (
         response.metadata["grounding_reason"]
-        == "Test answer is grounded."
+        == "No retrieved context is available."
     )
 
 
