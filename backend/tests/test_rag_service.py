@@ -1,10 +1,15 @@
 import pytest
 
 from app.rag.rag_service import RAGService
-from app.schemas.rag_context_schema import ContextChunk, RAGContext
+from app.schemas.rag_context_schema import (
+    ContextChunk,
+    RAGContext,
+)
 from app.schemas.rag_schema import RAGRequest
 from app.schemas.search_result_schema import SearchResultSchema
-from app.schemas.answer_validation_schema import AnswerValidationResult
+from app.schemas.answer_validation_schema import (
+    AnswerValidationResult,
+)
 
 
 # ============================================================
@@ -34,11 +39,9 @@ class FakeRetrievalService:
         self.received_top_k = top_k
         self.received_document_id = document_id
 
-        # Allow individual tests to control retrieval results
         if self.results is not None:
             return self.results
 
-        # Default fake retrieval result
         return [
             SearchResultSchema(
                 point_id="point-001",
@@ -71,14 +74,12 @@ class FakeContextBuilder:
         self.called = True
         self.received_results = results
 
-        # No retrieval results
         if not results:
             return RAGContext(
                 chunks=[],
                 formatted_context="",
             )
 
-        # Normal retrieval result
         return RAGContext(
             chunks=[
                 ContextChunk(
@@ -138,6 +139,7 @@ class FakeLLMService:
         self.received_prompt = None
 
     def generate(self, prompt):
+
         self.called = True
         self.received_prompt = prompt
 
@@ -174,6 +176,26 @@ class FakeAnswerValidator:
 
 
 # ============================================================
+# Fake Source Validator
+# ============================================================
+
+class FakeSourceValidator:
+
+    def __init__(self):
+        self.called = False
+        self.received_context = None
+        self.received_sources = None
+
+    def validate(self, context, sources):
+
+        self.called = True
+        self.received_context = context
+        self.received_sources = sources
+
+        return True
+
+
+# ============================================================
 # Service Factory
 # ============================================================
 
@@ -189,12 +211,15 @@ def create_service():
 
     answer_validator = FakeAnswerValidator()
 
+    source_validator = FakeSourceValidator()
+
     service = RAGService(
         retrieval_service=retrieval_service,
         context_builder=context_builder,
         prompt_builder=prompt_builder,
         llm_service=llm_service,
         answer_validator=answer_validator,
+        source_validator=source_validator,
     )
 
     return (
@@ -203,6 +228,8 @@ def create_service():
         context_builder,
         prompt_builder,
         llm_service,
+        answer_validator,
+        source_validator,
     )
 
 
@@ -214,6 +241,8 @@ def test_rag_service_generates_answer():
 
     (
         service,
+        _,
+        _,
         _,
         _,
         _,
@@ -241,6 +270,8 @@ def test_rag_service_calls_retrieval():
         _,
         _,
         _,
+        _,
+        _,
     ) = create_service()
 
     request = RAGRequest(
@@ -258,6 +289,8 @@ def test_rag_service_calls_context_builder():
         service,
         _,
         context_builder,
+        _,
+        _,
         _,
         _,
     ) = create_service()
@@ -279,6 +312,8 @@ def test_rag_service_calls_prompt_builder():
         _,
         prompt_builder,
         _,
+        _,
+        _,
     ) = create_service()
 
     request = RAGRequest(
@@ -298,6 +333,8 @@ def test_rag_service_calls_llm():
         _,
         _,
         llm_service,
+        _,
+        _,
     ) = create_service()
 
     request = RAGRequest(
@@ -313,6 +350,8 @@ def test_rag_service_returns_sources():
 
     (
         service,
+        _,
+        _,
         _,
         _,
         _,
@@ -339,6 +378,8 @@ def test_rag_service_returns_model_metadata():
 
     (
         service,
+        _,
+        _,
         _,
         _,
         _,
@@ -370,6 +411,8 @@ def test_rag_service_returns_grounding_metadata():
         _,
         _,
         _,
+        _,
+        _,
     ) = create_service()
 
     request = RAGRequest(
@@ -386,6 +429,39 @@ def test_rag_service_returns_grounding_metadata():
     )
 
 
+def test_rag_service_returns_source_validation_metadata():
+
+    (
+        service,
+        _,
+        _,
+        _,
+        _,
+        _,
+        source_validator,
+    ) = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    assert source_validator.called is True
+
+    assert source_validator.received_context is not None
+
+    assert (
+        len(source_validator.received_sources)
+        == 1
+    )
+
+    assert (
+        response.metadata["source_validation"]
+        is True
+    )
+
+
 def test_rag_request_rejects_empty_query():
 
     with pytest.raises(ValueError):
@@ -397,7 +473,7 @@ def test_rag_request_rejects_empty_query():
 
 def test_rag_service_returns_multiple_sources():
 
-    service, _, _, _, _ = create_service()
+    service, _, _, _, _, _, _ = create_service()
 
     request = RAGRequest(
         query="What is machine learning?"
@@ -415,7 +491,7 @@ def test_rag_service_returns_multiple_sources():
 
 def test_sources_preserve_context_order():
 
-    service, _, context_builder, _, _ = create_service()
+    service, _, context_builder, _, _, _, _ = create_service()
 
     request = RAGRequest(
         query="What is machine learning?"
@@ -433,7 +509,7 @@ def test_sources_preserve_context_order():
 
 def test_source_contains_retrieval_score():
 
-    service, _, _, _, _ = create_service()
+    service, _, _, _, _, _, _ = create_service()
 
     request = RAGRequest(
         query="What is machine learning?"
@@ -451,6 +527,8 @@ def test_rag_service_passes_retrieval_parameters():
     (
         service,
         retrieval_service,
+        _,
+        _,
         _,
         _,
         _,
@@ -501,12 +579,15 @@ def test_rag_service_handles_no_retrieval_results():
 
     answer_validator = FakeAnswerValidator()
 
+    source_validator = FakeSourceValidator()
+
     service = RAGService(
         retrieval_service=retrieval_service,
         context_builder=context_builder,
         prompt_builder=prompt_builder,
         llm_service=llm_service,
         answer_validator=answer_validator,
+        source_validator=source_validator,
     )
 
     request = RAGRequest(
@@ -589,7 +670,7 @@ def test_rag_service_handles_no_retrieval_results():
 
 def test_rag_service_passes_generated_prompt_to_llm():
 
-    service, _, _, _, llm_service = create_service()
+    service, _, _, _, llm_service, _, _ = create_service()
 
     request = RAGRequest(
         query="What is machine learning?"
@@ -610,4 +691,45 @@ def test_rag_service_passes_generated_prompt_to_llm():
         response.answer
         == "Machine learning enables systems "
         "to learn patterns from data."
+    )
+
+def test_rag_service_validates_sources():
+
+    retrieval_service = FakeRetrievalService()
+    context_builder = FakeContextBuilder()
+    prompt_builder = FakePromptBuilder()
+    llm_service = FakeLLMService()
+    answer_validator = FakeAnswerValidator()
+    source_validator = FakeSourceValidator()
+
+    service = RAGService(
+        retrieval_service=retrieval_service,
+        context_builder=context_builder,
+        prompt_builder=prompt_builder,
+        llm_service=llm_service,
+        answer_validator=answer_validator,
+        source_validator=source_validator,
+    )
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    response = service.generate(request)
+
+    assert source_validator.called is True
+
+    assert (
+        source_validator.received_context
+        is not None
+    )
+
+    assert (
+        len(source_validator.received_sources)
+        == 1
+    )
+
+    assert (
+        response.metadata["source_validation"]
+        is True
     )
