@@ -1,7 +1,9 @@
 from typing import Any
-
 from pydantic import BaseModel, Field, field_validator
-
+from app.core.settings import (
+    RAG_DEFAULT_TOP_K,
+    RAG_MAX_TOP_K,
+)
 
 class RAGRequest(BaseModel):
     """
@@ -15,10 +17,9 @@ class RAGRequest(BaseModel):
     )
 
     top_k: int = Field(
-        default=5,
-        ge=1,
-        le=20,
-        description="Number of relevant chunks to retrieve",
+    default=RAG_DEFAULT_TOP_K,
+    ge=1,
+    le=RAG_MAX_TOP_K,
     )
 
     document_id: str | None = Field(

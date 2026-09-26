@@ -66,3 +66,15 @@ LLM_MODEL = os.getenv(
 MIN_RELEVANCE_SCORE = float(
     os.getenv("MIN_RELEVANCE_SCORE", "0.5")
 )
+
+RAG_DEFAULT_TOP_K = int(
+    os.getenv("RAG_DEFAULT_TOP_K", "5")
+)
+
+RAG_MAX_TOP_K = int(
+    os.getenv("RAG_MAX_TOP_K", "20")
+)
+
+MIN_RELEVANCE_SCORE = float(
+    os.getenv("MIN_RELEVANCE_SCORE", "0.5")
+)
