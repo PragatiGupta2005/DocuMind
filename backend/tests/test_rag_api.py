@@ -150,3 +150,15 @@ def test_rag_query_success_response_contract():
     assert len(data["sources"]) == 1
     assert data["sources"][0]["document_id"] == "doc-001"
     assert data["metadata"]["model_name"] == "fake-llm"
+
+def test_rag_query_accepts_custom_top_k():
+
+    response = client.post(
+        "/rag/query",
+        json={
+            "query": "What is machine learning?",
+            "top_k": 10,
+        },
+    )
+
+    assert response.status_code == 200

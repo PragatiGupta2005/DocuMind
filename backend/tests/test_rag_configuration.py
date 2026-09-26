@@ -31,3 +31,40 @@ def test_rag_request_rejects_top_k_above_configured_max():
             query="What is machine learning?",
             top_k=RAG_MAX_TOP_K + 1,
         )
+
+def test_rag_request_accepts_custom_top_k():
+
+    request = RAGRequest(
+        query="What is machine learning?",
+        top_k=10,
+    )
+
+    assert request.top_k == 10
+
+def test_rag_request_accepts_custom_top_k():
+
+    request = RAGRequest(
+        query="What is machine learning?",
+        top_k=10,
+    )
+
+    assert request.top_k == 10
+
+def test_rag_request_accepts_minimum_top_k():
+
+    request = RAGRequest(
+        query="What is machine learning?",
+        top_k=1,
+    )
+
+    assert request.top_k == 1
+
+def test_rag_request_accepts_configured_max_top_k():
+
+    request = RAGRequest(
+        query="What is machine learning?",
+        top_k=RAG_MAX_TOP_K,
+    )
+
+    assert request.top_k == RAG_MAX_TOP_K
+
