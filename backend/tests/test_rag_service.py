@@ -1,5 +1,5 @@
 import pytest
-
+import logging
 from app.rag.rag_service import RAGService
 from app.schemas.rag_context_schema import (
     ContextChunk,
@@ -261,7 +261,18 @@ def test_rag_service_generates_answer():
         "to learn patterns from data."
     )
 
+def test_rag_service_logs_request(caplog):
+    service, _, _, _, _, _, _ = create_service()
 
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    with caplog.at_level(logging.INFO):
+        service.generate(request)
+
+    assert "RAG request received" in caplog.text
+    
 def test_rag_service_calls_retrieval():
 
     (

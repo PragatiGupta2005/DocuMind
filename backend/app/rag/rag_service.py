@@ -1,21 +1,23 @@
+import logging
+
 from app.rag.context_builder import ContextBuilder
 from app.rag.prompt_builder import PromptBuilder
 from app.rag.answer_validator import AnswerValidator
 from app.rag.source_validator import SourceValidator
-
 from app.schemas.rag_schema import (
     RAGRequest,
     RAGResponse,
     SourceReference,
 )
-
 from app.services.retrieval_service import RetrievalService
 from app.llm.llm_service import LLMService
-
 from app.exceptions.rag_exceptions import (
     RetrievalError,
     LLMError,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 class RAGService:
@@ -58,6 +60,18 @@ class RAGService:
             )
 
         # --------------------------------------------------
+        # 8.4.1 RAG Request Logging
+        # --------------------------------------------------
+
+        logger.info(
+            "RAG request received | query_length=%d | "
+            "top_k=%d | document_id=%s",
+            len(request.query),
+            request.top_k,
+            request.document_id,
+        )
+
+        # --------------------------------------------------
         # 2. Retrieve relevant chunks
         # --------------------------------------------------
 
@@ -81,6 +95,14 @@ class RAGService:
         # --------------------------------------------------
 
         if not context.chunks:
+
+            logger.info(
+                "No relevant context found | top_k=%d | "
+                "document_id=%s",
+                request.top_k,
+                request.document_id,
+            )
+
             return RAGResponse(
                 answer=(
                     "I couldn't find relevant information "

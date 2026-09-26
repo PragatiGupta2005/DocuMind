@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from app.api.documents import router as documents_router
 from app.api.rag import router as rag_router
+from app.core.logging_config import configure_logging
+
+configure_logging()
 
 app = FastAPI(
     title="DocuMind API",
