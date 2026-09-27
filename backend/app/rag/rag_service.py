@@ -89,6 +89,10 @@ class RAGService:
                 request.document_id,
             )
         except Exception as exc:
+            logger.error(
+                "Retrieval failed | error=%s",
+                exc,
+            )
             raise RetrievalError() from exc
 
         # --------------------------------------------------
@@ -160,6 +164,11 @@ class RAGService:
             )
 
         except Exception as exc:
+            logger.error(
+                "LLM generation failed | model=%s | error=%s",
+                self.llm_service.get_model_name(),
+                exc,
+            )
             raise LLMError() from exc
 
         # --------------------------------------------------

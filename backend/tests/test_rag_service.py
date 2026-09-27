@@ -10,7 +10,7 @@ from app.schemas.search_result_schema import SearchResultSchema
 from app.schemas.answer_validation_schema import (
     AnswerValidationResult,
 )
-
+from app.exceptions.rag_exceptions import RetrievalError,LLMError
 
 # ============================================================
 # Fake Retrieval Service
@@ -25,6 +25,7 @@ class FakeRetrievalService:
         self.received_document_id = None
 
         self.results = results
+        self.should_fail = False
 
     def retrieve(
         self,
@@ -35,6 +36,9 @@ class FakeRetrievalService:
 
         self.called = True
 
+        if self.should_fail:
+            raise RuntimeError("Retrieval service failed")
+        
         self.received_query = query
         self.received_top_k = top_k
         self.received_document_id = document_id
@@ -137,10 +141,15 @@ class FakeLLMService:
     def __init__(self):
         self.called = False
         self.received_prompt = None
+        self.should_fail = False
 
     def generate(self, prompt):
 
         self.called = True
+
+        if self.should_fail:
+            raise RuntimeError("LLM service failed")
+
         self.received_prompt = prompt
 
         return (
@@ -305,6 +314,41 @@ def test_rag_service_logs_llm_execution(caplog):
     assert "model=fake-llm" in caplog.text
     assert "LLM generation completed" in caplog.text
     assert "latency=" in caplog.text
+
+def test_rag_service_logs_retrieval_error(caplog):
+
+    service, retrieval_service, _, _, _, _, _ = create_service()
+
+    retrieval_service.should_fail = True
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(RetrievalError):
+            service.generate(request)
+
+    assert "Retrieval failed" in caplog.text
+    assert "Retrieval service failed" in caplog.text
+
+def test_rag_service_logs_llm_error(caplog):
+
+    service, _, _, _, llm_service, _, _ = create_service()
+
+    llm_service.should_fail = True
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(LLMError):
+            service.generate(request)
+
+    assert "LLM generation failed" in caplog.text
+    assert "LLM service failed" in caplog.text
+
 
 def test_rag_service_calls_retrieval():
 
