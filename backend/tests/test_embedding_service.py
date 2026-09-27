@@ -1,6 +1,8 @@
 from app.embeddings.embedding_service import EmbeddingService
 from app.schemas.chunk_schema import ChunkSchema
 import pytest
+import logging
+
 def create_test_chunk(
     chunk_id: int,
     text: str
@@ -189,3 +191,44 @@ def test_api_embedding_dimensions():
     embedding.model_name = "gemini-embedding-001"
 
     assert embedding.get_dimensions() == 3072
+
+def test_embed_single_text_logs_latency(caplog):
+
+    service = EmbeddingService()
+
+    with caplog.at_level(logging.INFO):
+        service.embed_text(
+            "Artificial Intelligence is amazing."
+        )
+
+    assert "Embedding completed" in caplog.text
+    assert "provider=" in caplog.text
+    assert "texts=1" in caplog.text
+    assert "latency=" in caplog.text
+
+def test_embed_multiple_chunks_logs_latency(caplog):
+
+    service = EmbeddingService()
+
+    chunks = [
+        create_test_chunk(
+            chunk_id=1,
+            text="Artificial Intelligence is amazing."
+        ),
+        create_test_chunk(
+            chunk_id=2,
+            text="Machine Learning is a subset of AI."
+        ),
+        create_test_chunk(
+            chunk_id=3,
+            text="Deep Learning uses Neural Networks."
+        )
+    ]
+
+    with caplog.at_level(logging.INFO):
+        service.embed_chunks(chunks)
+
+    assert "Embedding completed" in caplog.text
+    assert "provider=" in caplog.text
+    assert "texts=3" in caplog.text
+    assert "latency=" in caplog.text

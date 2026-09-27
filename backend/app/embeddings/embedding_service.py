@@ -1,6 +1,10 @@
+import logging
+import time
 from app.schemas.chunk_schema import ChunkSchema
 from app.schemas.embedding_schema import EmbeddingSchema
 from app.embeddings.embedding_factory import EmbeddingFactory
+
+logger = logging.getLogger(__name__)
 
 class EmbeddingService:
     """
@@ -26,7 +30,17 @@ class EmbeddingService:
                 "Text cannot be empty."
             )
 
-        return self.provider.embed(text)
+        start_time = time.perf_counter()
+        vector = self.provider.embed(text)
+        latency = time.perf_counter() - start_time
+
+        logger.info(
+            "Embedding completed | provider=%s | texts=1 | latency=%.4fs",
+            self.provider.get_model_name(),
+            latency,
+        )
+
+        return vector
 
     def embed_chunk(
         self,
@@ -39,7 +53,17 @@ class EmbeddingService:
         if not chunk.text or not chunk.text.strip():  #Single chunk
             raise ValueError("Chunk text cannot be empty.")
 
+        start_time = time.perf_counter()
+
         vector = self.provider.embed(chunk.text)
+
+        latency = time.perf_counter() - start_time
+
+        logger.info(
+            "Embedding completed | provider=%s | texts=1 | latency=%.4fs",
+            self.provider.get_model_name(),
+            latency,
+        )
 
         metadata = dict(chunk.metadata)
         metadata.update({
@@ -77,7 +101,19 @@ class EmbeddingService:
                 raise ValueError(f"Chunk {chunk.chunk_id} contains empty text.")
             texts.append(chunk.text)
 
+        start_time = time.perf_counter()
+
         vectors = self.provider.embed_batch(texts)
+
+        latency = time.perf_counter() - start_time
+
+        logger.info(
+            "Embedding completed | provider=%s | texts=%d | latency=%.4fs",
+            self.provider.get_model_name(),
+            len(texts),
+            latency,
+        )
+
         if len(chunks) != len(vectors):
             raise RuntimeError(
                 "Number of generated embeddings does not "
