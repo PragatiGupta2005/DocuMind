@@ -350,6 +350,7 @@ def test_rag_service_logs_llm_error(caplog):
 
     assert "LLM generation failed" in caplog.text
     assert "LLM service failed" in caplog.text
+    assert "latency=" in caplog.text
 
 
 def test_rag_service_calls_retrieval():

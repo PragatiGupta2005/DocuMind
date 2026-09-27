@@ -168,21 +168,25 @@ class RAGService:
         try:
             answer = self.llm_service.generate(prompt)
 
+        except Exception as exc:
             llm_latency = time.perf_counter() - llm_start_time
 
-            logger.info(
-                "LLM generation completed | model=%s | latency=%.4fs",
+            logger.error(
+                "LLM generation failed | model=%s | latency=%.4fs | error=%s",
                 self.llm_service.get_model_name(),
                 llm_latency,
-            )
-
-        except Exception as exc:
-            logger.error(
-                "LLM generation failed | model=%s | error=%s",
-                self.llm_service.get_model_name(),
                 exc,
             )
-            raise LLMError() from exc
+
+            raise LLMError(str(exc)) from exc
+
+        llm_latency = time.perf_counter() - llm_start_time
+
+        logger.info(
+            "LLM generation completed | model=%s | latency=%.4fs",
+            self.llm_service.get_model_name(),
+            llm_latency,
+        )
 
         # --------------------------------------------------
         # 7. Validate answer grounding
