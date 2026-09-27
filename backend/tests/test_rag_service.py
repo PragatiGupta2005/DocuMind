@@ -846,7 +846,6 @@ def test_rag_service_logs_pipeline_latency(caplog):
     assert "pipeline_latency" in response.metadata
     assert response.metadata["pipeline_latency"] >= 0
 
-
 def test_rag_service_logs_pipeline_latency_on_llm_error(caplog):
 
     service, _, _, _, llm_service, _, _ = create_service()
