@@ -298,6 +298,7 @@ def test_rag_service_logs_retrieval_metadata(caplog):
     assert "retrieved_chunks=1" in caplog.text
     assert "top_k=5" in caplog.text
     assert "document_id=None" in caplog.text
+    assert "latency=" in caplog.text
 
 def test_rag_service_logs_llm_execution(caplog):
 
@@ -331,6 +332,7 @@ def test_rag_service_logs_retrieval_error(caplog):
 
     assert "Retrieval failed" in caplog.text
     assert "Retrieval service failed" in caplog.text
+    assert "latency=" in caplog.text
 
 def test_rag_service_logs_llm_error(caplog):
 

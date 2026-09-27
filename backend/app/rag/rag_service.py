@@ -74,6 +74,7 @@ class RAGService:
         # --------------------------------------------------
         # 2. Retrieve relevant chunks
         # --------------------------------------------------
+        retrieval_start_time = time.perf_counter()
 
         try:
             results = self.retrieval_service.retrieve(
@@ -82,19 +83,31 @@ class RAGService:
                 document_id=request.document_id,
             )
 
+            retrieval_latency = (
+                time.perf_counter() - retrieval_start_time
+            )
+
             logger.info(
-                "Retrieval completed | retrieved_chunks=%d | top_k=%d | document_id=%s",
+                "Retrieval completed | retrieved_chunks=%d | top_k=%d | document_id=%s | latency=%.4fs",
                 len(results),
                 request.top_k,
                 request.document_id,
+                retrieval_latency,
             )
+
         except Exception as exc:
+            retrieval_latency = (
+                time.perf_counter() - retrieval_start_time
+            )
+
             logger.error(
-                "Retrieval failed | error=%s",
+                "Retrieval failed | latency=%.4fs | error=%s",
+                retrieval_latency,
                 exc,
             )
-            raise RetrievalError() from exc
 
+            raise RetrievalError(str(exc)) from exc
+        
         # --------------------------------------------------
         # 3. Build context
         # --------------------------------------------------
