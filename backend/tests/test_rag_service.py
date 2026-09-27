@@ -289,7 +289,23 @@ def test_rag_service_logs_retrieval_metadata(caplog):
     assert "retrieved_chunks=1" in caplog.text
     assert "top_k=5" in caplog.text
     assert "document_id=None" in caplog.text
-    
+
+def test_rag_service_logs_llm_execution(caplog):
+
+    service, _, _, _, _, _, _ = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    with caplog.at_level(logging.INFO):
+        service.generate(request)
+
+    assert "LLM generation started" in caplog.text
+    assert "model=fake-llm" in caplog.text
+    assert "LLM generation completed" in caplog.text
+    assert "latency=" in caplog.text
+
 def test_rag_service_calls_retrieval():
 
     (

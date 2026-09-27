@@ -141,9 +141,24 @@ class RAGService:
         # --------------------------------------------------
         # 6. Generate answer
         # --------------------------------------------------
+        logger.info(
+            "LLM generation started | model=%s",
+            self.llm_service.get_model_name(),
+        )
+
+        llm_start_time = time.perf_counter()
 
         try:
             answer = self.llm_service.generate(prompt)
+
+            llm_latency = time.perf_counter() - llm_start_time
+
+            logger.info(
+                "LLM generation completed | model=%s | latency=%.4fs",
+                self.llm_service.get_model_name(),
+                llm_latency,
+            )
+
         except Exception as exc:
             raise LLMError() from exc
 
