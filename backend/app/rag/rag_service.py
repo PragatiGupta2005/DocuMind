@@ -1,5 +1,5 @@
 import logging
-
+import time
 from app.rag.context_builder import ContextBuilder
 from app.rag.prompt_builder import PromptBuilder
 from app.rag.answer_validator import AnswerValidator
@@ -80,6 +80,13 @@ class RAGService:
                 query=request.query,
                 top_k=request.top_k,
                 document_id=request.document_id,
+            )
+
+            logger.info(
+                "Retrieval completed | retrieved_chunks=%d | top_k=%d | document_id=%s",
+                len(results),
+                request.top_k,
+                request.document_id,
             )
         except Exception as exc:
             raise RetrievalError() from exc

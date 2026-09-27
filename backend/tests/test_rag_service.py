@@ -272,6 +272,23 @@ def test_rag_service_logs_request(caplog):
         service.generate(request)
 
     assert "RAG request received" in caplog.text
+
+def test_rag_service_logs_retrieval_metadata(caplog):
+
+    service, _, _, _, _, _, _ = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?",
+        top_k=5,
+    )
+
+    with caplog.at_level(logging.INFO):
+        service.generate(request)
+
+    assert "Retrieval completed" in caplog.text
+    assert "retrieved_chunks=1" in caplog.text
+    assert "top_k=5" in caplog.text
+    assert "document_id=None" in caplog.text
     
 def test_rag_service_calls_retrieval():
 
@@ -744,3 +761,4 @@ def test_rag_service_validates_sources():
         response.metadata["source_validation"]
         is True
     )
+
