@@ -825,3 +825,41 @@ def test_rag_service_validates_sources():
         is True
     )
 
+def test_rag_service_logs_pipeline_latency(caplog):
+
+    service, _, _, _, _, _, _ = create_service()
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    with caplog.at_level(logging.INFO):
+        response = service.generate(request)
+
+    assert response.answer != ""
+
+    assert "RAG pipeline started" in caplog.text
+    assert "RAG pipeline completed" in caplog.text
+    assert "latency=" in caplog.text
+    assert "retrieved_chunks=1" in caplog.text
+
+    assert "pipeline_latency" in response.metadata
+    assert response.metadata["pipeline_latency"] >= 0
+
+
+def test_rag_service_logs_pipeline_latency_on_llm_error(caplog):
+
+    service, _, _, _, llm_service, _, _ = create_service()
+
+    llm_service.should_fail = True
+
+    request = RAGRequest(
+        query="What is machine learning?"
+    )
+
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(LLMError):
+            service.generate(request)
+
+    assert "LLM generation failed" in caplog.text
+    assert "pipeline_latency=" in caplog.text

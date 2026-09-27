@@ -1,5 +1,6 @@
 import logging
 import time
+
 from app.rag.context_builder import ContextBuilder
 from app.rag.prompt_builder import PromptBuilder
 from app.rag.answer_validator import AnswerValidator
@@ -72,8 +73,22 @@ class RAGService:
         )
 
         # --------------------------------------------------
+        # 8.5.4 Pipeline Performance
+        # Start total RAG pipeline timer
+        # --------------------------------------------------
+
+        pipeline_start_time = time.perf_counter()
+
+        logger.info(
+            "RAG pipeline started | top_k=%d | document_id=%s",
+            request.top_k,
+            request.document_id,
+        )
+
+        # --------------------------------------------------
         # 2. Retrieve relevant chunks
         # --------------------------------------------------
+
         retrieval_start_time = time.perf_counter()
 
         try:
@@ -88,7 +103,11 @@ class RAGService:
             )
 
             logger.info(
-                "Retrieval completed | retrieved_chunks=%d | top_k=%d | document_id=%s | latency=%.4fs",
+                "Retrieval completed | "
+                "retrieved_chunks=%d | "
+                "top_k=%d | "
+                "document_id=%s | "
+                "latency=%.4fs",
                 len(results),
                 request.top_k,
                 request.document_id,
@@ -100,14 +119,22 @@ class RAGService:
                 time.perf_counter() - retrieval_start_time
             )
 
+            pipeline_latency = (
+                time.perf_counter() - pipeline_start_time
+            )
+
             logger.error(
-                "Retrieval failed | latency=%.4fs | error=%s",
+                "Retrieval failed | "
+                "latency=%.4fs | "
+                "pipeline_latency=%.4fs | "
+                "error=%s",
                 retrieval_latency,
+                pipeline_latency,
                 exc,
             )
 
             raise RetrievalError(str(exc)) from exc
-        
+
         # --------------------------------------------------
         # 3. Build context
         # --------------------------------------------------
@@ -120,11 +147,18 @@ class RAGService:
 
         if not context.chunks:
 
+            pipeline_latency = (
+                time.perf_counter() - pipeline_start_time
+            )
+
             logger.info(
-                "No relevant context found | top_k=%d | "
-                "document_id=%s",
+                "No relevant context found | "
+                "top_k=%d | "
+                "document_id=%s | "
+                "pipeline_latency=%.4fs",
                 request.top_k,
                 request.document_id,
+                pipeline_latency,
             )
 
             return RAGResponse(
@@ -143,6 +177,7 @@ class RAGService:
                         "No retrieved context is available."
                     ),
                     "source_validation": True,
+                    "pipeline_latency": pipeline_latency,
                 },
             )
 
@@ -158,6 +193,7 @@ class RAGService:
         # --------------------------------------------------
         # 6. Generate answer
         # --------------------------------------------------
+
         logger.info(
             "LLM generation started | model=%s",
             self.llm_service.get_model_name(),
@@ -169,21 +205,36 @@ class RAGService:
             answer = self.llm_service.generate(prompt)
 
         except Exception as exc:
-            llm_latency = time.perf_counter() - llm_start_time
+            llm_latency = (
+                time.perf_counter() - llm_start_time
+            )
+
+            pipeline_latency = (
+                time.perf_counter() - pipeline_start_time
+            )
 
             logger.error(
-                "LLM generation failed | model=%s | latency=%.4fs | error=%s",
+                "LLM generation failed | "
+                "model=%s | "
+                "latency=%.4fs | "
+                "pipeline_latency=%.4fs | "
+                "error=%s",
                 self.llm_service.get_model_name(),
                 llm_latency,
+                pipeline_latency,
                 exc,
             )
 
             raise LLMError(str(exc)) from exc
 
-        llm_latency = time.perf_counter() - llm_start_time
+        llm_latency = (
+            time.perf_counter() - llm_start_time
+        )
 
         logger.info(
-            "LLM generation completed | model=%s | latency=%.4fs",
+            "LLM generation completed | "
+            "model=%s | "
+            "latency=%.4fs",
             self.llm_service.get_model_name(),
             llm_latency,
         )
@@ -213,7 +264,23 @@ class RAGService:
         )
 
         # --------------------------------------------------
-        # 10. Return structured response
+        # 10. Calculate total pipeline latency
+        # --------------------------------------------------
+
+        pipeline_latency = (
+            time.perf_counter() - pipeline_start_time
+        )
+
+        logger.info(
+            "RAG pipeline completed | "
+            "latency=%.4fs | "
+            "retrieved_chunks=%d",
+            pipeline_latency,
+            len(context.chunks),
+        )
+
+        # --------------------------------------------------
+        # 11. Return structured response
         # --------------------------------------------------
 
         return RAGResponse(
@@ -229,6 +296,7 @@ class RAGService:
                 "is_grounded": validation.is_grounded,
                 "grounding_reason": validation.reason,
                 "source_validation": source_validation,
+                "pipeline_latency": pipeline_latency,
             },
         )
 
