@@ -214,3 +214,58 @@ def test_upload_creates_unique_document_ids(
         document_1["document_id"]
         != document_2["document_id"]
     )
+
+def test_txt_upload_adds_management_metadata(
+    tmp_path,
+    monkeypatch,
+):
+    """
+    Verify that document upload adds management metadata
+    required for document lifecycle and statistics.
+    """
+
+    monkeypatch.setattr(
+        "app.storage.local_storage.UPLOAD_DIRECTORY",
+        str(tmp_path),
+    )
+
+    content = (
+        "Machine learning is a field of artificial intelligence "
+        "that enables systems to learn from data."
+    )
+
+    response = client.post(
+        "/documents/upload",
+        files={
+            "file": (
+                "machine_learning.txt",
+                content.encode("utf-8"),
+                "text/plain",
+            )
+        },
+    )
+
+    assert response.status_code == 200
+
+    document = response.json()["document"]
+    metadata = document["metadata"]
+
+    # Original filename
+    assert metadata["original_filename"] == "machine_learning.txt"
+
+    # Storage path
+    assert metadata["storage_path"]
+
+    # File size
+    assert metadata["file_size"] == len(content.encode("utf-8"))
+
+    # Creation timestamp
+    assert metadata["created_at"]
+
+    # Chunk count
+    assert metadata["chunk_count"] > 0
+
+    # Chunk count should match returned chunks
+    assert metadata["chunk_count"] == len(
+        response.json()["chunks"]
+    )

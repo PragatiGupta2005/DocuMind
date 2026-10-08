@@ -94,7 +94,31 @@ def test_list_documents_returns_lightweight_metadata():
         assert "text" not in document
         assert "metadata" not in document
 
-def test_list_documents_returns_document_metadata():
+def test_list_documents_returns_document_metadata(
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "app.storage.document_registry.UPLOAD_DIRECTORY",
+        str(tmp_path),
+    )
+
+    registry = DocumentRegistry()
+
+    document = DocumentSchema(
+        document_id="doc-001",
+        filename="machine-learning.txt",
+        file_type="txt",
+        text="Machine learning is a branch of AI.",
+        metadata={
+            "original_filename": "machine-learning.txt",
+            "file_size": 1234,
+            "created_at": "2026-10-09T00:00:00+00:00",
+            "chunk_count": 5,
+        },
+    )
+
+    registry.add(document)
 
     response = client.get("/documents")
 
@@ -102,10 +126,19 @@ def test_list_documents_returns_document_metadata():
 
     documents = response.json()
 
-    if documents:
-        document = documents[0]
+    assert len(documents) == 1
 
-        assert "original_filename" in document
-        assert "file_size" in document
-        assert "created_at" in document
-        assert "chunk_count" in document
+    document = documents[0]
+
+    assert document["document_id"] == "doc-001"
+    assert document["filename"] == "machine-learning.txt"
+    assert document["file_type"] == "txt"
+
+    assert document["original_filename"] == "machine-learning.txt"
+    assert document["file_size"] == 1234
+    assert document["created_at"] == "2026-10-09T00:00:00+00:00"
+    assert document["chunk_count"] == 5
+
+    # Listing endpoint must remain lightweight.
+    assert "text" not in document
+    assert "metadata" not in document

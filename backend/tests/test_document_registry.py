@@ -142,3 +142,50 @@ def test_registry_statistics(monkeypatch):
         ".pdf": 2,
         ".txt": 1,
     }
+
+def test_registry_statistics_handles_missing_metadata(
+    monkeypatch,
+):
+    """
+    Verify that statistics remain compatible with older
+    documents that do not contain file_size or chunk_count.
+    """
+
+    registry = DocumentRegistry()
+
+    documents = [
+        {
+            "document_id": "doc-old",
+            "filename": "old.txt",
+            "file_type": ".txt",
+            "text": "Old document",
+            "metadata": {},
+        },
+        {
+            "document_id": "doc-new",
+            "filename": "new.pdf",
+            "file_type": ".pdf",
+            "text": "New document",
+            "metadata": {
+                "file_size": 2000,
+                "chunk_count": 10,
+            },
+        },
+    ]
+
+    monkeypatch.setattr(
+        registry,
+        "_read",
+        lambda: documents,
+    )
+
+    statistics = registry.get_statistics()
+
+    assert statistics["total_documents"] == 2
+    assert statistics["total_chunks"] == 10
+    assert statistics["total_size"] == 2000
+
+    assert statistics["file_types"] == {
+        ".txt": 1,
+        ".pdf": 1,
+    }

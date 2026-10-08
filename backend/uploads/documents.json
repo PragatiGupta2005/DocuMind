@@ -1082,5 +1082,197 @@
       "created_at": "2026-10-08T19:07:27.684562+00:00",
       "chunk_count": 1
     }
+  },
+  {
+    "document_id": "af1d9c0c-12cb-438b-a06f-ae7d3d077df6",
+    "filename": "af1d9c0c-12cb-438b-a06f-ae7d3d077df6.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1791487734.2159755",
+      "modified": "1791487734.216976",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-42\\test_txt_upload_processes_and_0\\af1d9c0c-12cb-438b-a06f-ae7d3d077df6.txt",
+      "original_filename": "machine_learning.txt",
+      "file_size": 153,
+      "created_at": "2026-10-08T19:28:54.218583+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "9e7c9f41-c9d8-4b65-9e7e-1e6207751846",
+    "filename": "9e7c9f41-c9d8-4b65-9e7e-1e6207751846.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1791487744.3573537",
+      "modified": "1791487744.3579123",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-42\\test_txt_upload_preserves_docu0\\9e7c9f41-c9d8-4b65-9e7e-1e6207751846.txt",
+      "original_filename": "ai.txt",
+      "file_size": 98,
+      "created_at": "2026-10-08T19:29:04.359821+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "2b812ccb-17ab-401a-9e0a-6bb694704d17",
+    "filename": "2b812ccb-17ab-401a-9e0a-6bb694704d17.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1791487768.5912886",
+      "modified": "1791487768.5912886",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-42\\test_txt_upload_generates_chun0\\2b812ccb-17ab-401a-9e0a-6bb694704d17.txt",
+      "original_filename": "ai_topics.txt",
+      "file_size": 235,
+      "created_at": "2026-10-08T19:29:28.593015+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "3659db3d-ab37-4081-a771-6f1eb3d24ccf",
+    "filename": "3659db3d-ab37-4081-a771-6f1eb3d24ccf.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1791487825.707736",
+      "modified": "1791487825.7137358",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-42\\test_upload_creates_unique_doc0\\3659db3d-ab37-4081-a771-6f1eb3d24ccf.txt",
+      "original_filename": "document1.txt",
+      "file_size": 31,
+      "created_at": "2026-10-08T19:30:25.720470+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "62d37dd8-65ab-497a-9382-4d076da224cb",
+    "filename": "62d37dd8-65ab-497a-9382-4d076da224cb.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1791487904.499828",
+      "modified": "1791487904.50283",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-42\\test_upload_creates_unique_doc0\\62d37dd8-65ab-497a-9382-4d076da224cb.txt",
+      "original_filename": "document2.txt",
+      "file_size": 31,
+      "created_at": "2026-10-08T19:31:44.504161+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "1d586fe4-6245-4888-821e-ed98c26b10ca",
+    "filename": "1d586fe4-6245-4888-821e-ed98c26b10ca.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a field of artificial intelligence that enables systems to learn from data.",
+    "metadata": {
+      "size_bytes": "95",
+      "created": "1791487961.3899984",
+      "modified": "1791487961.3899984",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-42\\test_txt_upload_adds_managemen0\\1d586fe4-6245-4888-821e-ed98c26b10ca.txt",
+      "original_filename": "machine_learning.txt",
+      "file_size": 95,
+      "created_at": "2026-10-08T19:32:41.391654+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "4a223b56-1197-4807-a2c4-5d783239ef98",
+    "filename": "4a223b56-1197-4807-a2c4-5d783239ef98.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1791489596.4159",
+      "modified": "1791489596.4159",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-45\\test_txt_upload_processes_and_0\\4a223b56-1197-4807-a2c4-5d783239ef98.txt",
+      "original_filename": "machine_learning.txt",
+      "file_size": 153,
+      "created_at": "2026-10-08T19:59:56.419040+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "3da185d2-c322-422b-b51a-ab5f2a76094b",
+    "filename": "3da185d2-c322-422b-b51a-ab5f2a76094b.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1791489603.5870225",
+      "modified": "1791489603.5875337",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-45\\test_txt_upload_preserves_docu0\\3da185d2-c322-422b-b51a-ab5f2a76094b.txt",
+      "original_filename": "ai.txt",
+      "file_size": 98,
+      "created_at": "2026-10-08T20:00:03.589490+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "acf1018f-c901-44b7-928b-a60ba08879aa",
+    "filename": "acf1018f-c901-44b7-928b-a60ba08879aa.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1791489609.8573236",
+      "modified": "1791489609.8573236",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-45\\test_txt_upload_generates_chun0\\acf1018f-c901-44b7-928b-a60ba08879aa.txt",
+      "original_filename": "ai_topics.txt",
+      "file_size": 235,
+      "created_at": "2026-10-08T20:00:09.865912+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "bea4d1aa-5913-4811-8019-6027677196c2",
+    "filename": "bea4d1aa-5913-4811-8019-6027677196c2.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1791489615.7905407",
+      "modified": "1791489615.7905407",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-45\\test_upload_creates_unique_doc0\\bea4d1aa-5913-4811-8019-6027677196c2.txt",
+      "original_filename": "document1.txt",
+      "file_size": 31,
+      "created_at": "2026-10-08T20:00:15.798801+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "db89e7ac-793b-4502-8ef3-b53a20917590",
+    "filename": "db89e7ac-793b-4502-8ef3-b53a20917590.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1791489624.7905285",
+      "modified": "1791489624.7905285",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-45\\test_upload_creates_unique_doc0\\db89e7ac-793b-4502-8ef3-b53a20917590.txt",
+      "original_filename": "document2.txt",
+      "file_size": 31,
+      "created_at": "2026-10-08T20:00:24.800577+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "64fbc851-b004-4910-93d0-f56ab2a6c17b",
+    "filename": "64fbc851-b004-4910-93d0-f56ab2a6c17b.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a field of artificial intelligence that enables systems to learn from data.",
+    "metadata": {
+      "size_bytes": "95",
+      "created": "1791489630.702214",
+      "modified": "1791489630.702214",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-45\\test_txt_upload_adds_managemen0\\64fbc851-b004-4910-93d0-f56ab2a6c17b.txt",
+      "original_filename": "machine_learning.txt",
+      "file_size": 95,
+      "created_at": "2026-10-08T20:00:30.706862+00:00",
+      "chunk_count": 1
+    }
   }
 ]
