@@ -2,6 +2,7 @@ from fastapi import APIRouter, File, UploadFile, HTTPException
 from app.services.upload_service import UploadService
 from app.storage.document_registry import DocumentRegistry
 from app.services.document_service import DocumentService
+from app.schemas.document_list_schema import DocumentListItemSchema
 
 router = APIRouter(
     prefix="/documents",
@@ -20,13 +21,35 @@ async def upload_document(
         file
     )
 
-@router.get("")
+@router.get(
+    "",
+    response_model=list[DocumentListItemSchema]
+)
 async def list_documents():
-    """
-    Return all uploaded documents.
-    """
+
     registry = DocumentRegistry()
-    return registry.list_all()
+    documents = registry.list_all()
+
+    return [
+        DocumentListItemSchema(
+            document_id=document.document_id,
+            filename=document.filename,
+            file_type=document.file_type,
+            original_filename=document.metadata.get(
+                "original_filename"
+            ),
+            file_size=document.metadata.get(
+                "file_size"
+            ),
+            created_at=document.metadata.get(
+                "created_at"
+            ),
+            chunk_count=document.metadata.get(
+                "chunk_count"
+            ),
+        )
+        for document in documents
+    ]
 
 @router.get("/{document_id}")
 async def get_document(

@@ -73,3 +73,39 @@ def test_delete_missing_document_returns_404(
     assert response.status_code == 404
     data = response.json()
     assert data["detail"] == "Document not found"
+
+def test_list_documents_returns_lightweight_metadata():
+
+    response = client.get("/documents")
+
+    assert response.status_code == 200
+
+    documents = response.json()
+
+    assert isinstance(documents, list)
+
+    if documents:
+        document = documents[0]
+
+        assert "document_id" in document
+        assert "filename" in document
+        assert "file_type" in document
+
+        assert "text" not in document
+        assert "metadata" not in document
+
+def test_list_documents_returns_document_metadata():
+
+    response = client.get("/documents")
+
+    assert response.status_code == 200
+
+    documents = response.json()
+
+    if documents:
+        document = documents[0]
+
+        assert "original_filename" in document
+        assert "file_size" in document
+        assert "created_at" in document
+        assert "chunk_count" in document
