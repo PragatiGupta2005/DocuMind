@@ -3,6 +3,9 @@ from app.services.upload_service import UploadService
 from app.storage.document_registry import DocumentRegistry
 from app.services.document_service import DocumentService
 from app.schemas.document_list_schema import DocumentListItemSchema
+from app.schemas.document_statistics_schema import (
+    DocumentStatisticsSchema
+)
 
 router = APIRouter(
     prefix="/documents",
@@ -67,6 +70,16 @@ async def get_document(
         )
     return document
 
+@router.get(
+    "/statistics",
+    response_model=DocumentStatisticsSchema
+)
+async def get_document_statistics():
+
+    registry = DocumentRegistry()
+
+    return registry.get_statistics()
+ 
 @router.delete("/{document_id}")
 async def delete_document(
     document_id: str,

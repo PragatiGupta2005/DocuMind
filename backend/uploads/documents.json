@@ -1002,5 +1002,85 @@
       "created_at": "2026-10-08T18:41:50.490857+00:00",
       "chunk_count": 1
     }
+  },
+  {
+    "document_id": "15b276c7-8fbc-4012-988a-76b79b6f2fd7",
+    "filename": "15b276c7-8fbc-4012-988a-76b79b6f2fd7.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. It allows computers to learn patterns from data. Supervised learning uses labeled training data.",
+    "metadata": {
+      "size_bytes": "153",
+      "created": "1791486411.9296086",
+      "modified": "1791486411.937603",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-41\\test_txt_upload_processes_and_0\\15b276c7-8fbc-4012-988a-76b79b6f2fd7.txt",
+      "original_filename": "machine_learning.txt",
+      "file_size": 153,
+      "created_at": "2026-10-08T19:06:51.938974+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "b03da566-c7a5-42f4-bfd1-b9f2842f4653",
+    "filename": "b03da566-c7a5-42f4-bfd1-b9f2842f4653.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence allows machines to perform tasks that normally require human intelligence.",
+    "metadata": {
+      "size_bytes": "98",
+      "created": "1791486420.8908987",
+      "modified": "1791486420.8908987",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-41\\test_txt_upload_preserves_docu0\\b03da566-c7a5-42f4-bfd1-b9f2842f4653.txt",
+      "original_filename": "ai.txt",
+      "file_size": 98,
+      "created_at": "2026-10-08T19:07:00.898978+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "49fc96a7-ade6-47b4-bf41-a4dc9615e70c",
+    "filename": "49fc96a7-ade6-47b4-bf41-a4dc9615e70c.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence is a field of computer science. Machine learning is a subset of artificial intelligence. Deep learning uses neural networks to learn representations. Natural language processing allows computers to process text.",
+    "metadata": {
+      "size_bytes": "235",
+      "created": "1791486429.320886",
+      "modified": "1791486429.320886",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-41\\test_txt_upload_generates_chun0\\49fc96a7-ade6-47b4-bf41-a4dc9615e70c.txt",
+      "original_filename": "ai_topics.txt",
+      "file_size": 235,
+      "created_at": "2026-10-08T19:07:09.326665+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "269bd839-f5d8-4439-aa07-e4e564166b7e",
+    "filename": "269bd839-f5d8-4439-aa07-e4e564166b7e.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1791486436.8765585",
+      "modified": "1791486436.8765585",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-41\\test_upload_creates_unique_doc0\\269bd839-f5d8-4439-aa07-e4e564166b7e.txt",
+      "original_filename": "document1.txt",
+      "file_size": 31,
+      "created_at": "2026-10-08T19:07:16.878606+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "d638a081-38f7-41ef-80b2-5107394df653",
+    "filename": "d638a081-38f7-41ef-80b2-5107394df653.txt",
+    "file_type": "txt",
+    "text": "Machine learning test document.",
+    "metadata": {
+      "size_bytes": "31",
+      "created": "1791486447.6781301",
+      "modified": "1791486447.6781301",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-41\\test_upload_creates_unique_doc0\\d638a081-38f7-41ef-80b2-5107394df653.txt",
+      "original_filename": "document2.txt",
+      "file_size": 31,
+      "created_at": "2026-10-08T19:07:27.684562+00:00",
+      "chunk_count": 1
+    }
   }
 ]

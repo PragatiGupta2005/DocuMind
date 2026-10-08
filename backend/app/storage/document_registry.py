@@ -91,3 +91,27 @@ class DocumentRegistry:
             self._write(remaining)
 
         return deleted
+
+    def get_statistics(self) -> dict:
+        documents = self._read()
+
+        total_documents = len(documents)
+        total_chunks = 0
+        total_size = 0
+        file_types = {}
+
+        for document in documents:
+            metadata = document.get("metadata", {})
+
+            total_chunks += metadata.get("chunk_count", 0)
+            total_size += metadata.get("file_size", 0)
+
+            file_type = document.get("file_type", "unknown")
+            file_types[file_type] = file_types.get(file_type, 0) + 1
+
+        return {
+            "total_documents": total_documents,
+            "total_chunks": total_chunks,
+            "total_size": total_size,
+            "file_types": file_types,
+        }

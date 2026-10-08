@@ -88,3 +88,57 @@ def test_registry_delete_missing_document(
     deleted = registry.delete("does-not-exist")
 
     assert deleted is False
+
+def test_registry_statistics(monkeypatch):
+
+    registry = DocumentRegistry()
+
+    documents = [
+        {
+            "document_id": "doc-1",
+            "filename": "ai.pdf",
+            "file_type": ".pdf",
+            "text": "text",
+            "metadata": {
+                "file_size": 1000,
+                "chunk_count": 5,
+            },
+        },
+        {
+            "document_id": "doc-2",
+            "filename": "ml.txt",
+            "file_type": ".txt",
+            "text": "text",
+            "metadata": {
+                "file_size": 500,
+                "chunk_count": 3,
+            },
+        },
+        {
+            "document_id": "doc-3",
+            "filename": "deep.pdf",
+            "file_type": ".pdf",
+            "text": "text",
+            "metadata": {
+                "file_size": 1500,
+                "chunk_count": 7,
+            },
+        },
+    ]
+
+    monkeypatch.setattr(
+        registry,
+        "_read",
+        lambda: documents
+    )
+
+    statistics = registry.get_statistics()
+
+    assert statistics["total_documents"] == 3
+    assert statistics["total_chunks"] == 15
+    assert statistics["total_size"] == 3000
+
+    assert statistics["file_types"] == {
+        ".pdf": 2,
+        ".txt": 1,
+    }
