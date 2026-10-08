@@ -9,6 +9,8 @@ from app.schemas.vector_store_schema import VectorStoreSchema
 from app.vector_store.qdrant_store import QdrantVectorStore
 from app.vector_store.collection_config import LOCAL_COLLECTION_NAME
 from app.storage.document_registry import DocumentRegistry
+from datetime import datetime, timezone
+from pathlib import Path
 
 class UploadService:
     """
@@ -32,8 +34,32 @@ class UploadService:
         storage_path = await self.storage.save(file=file,filename=unique_filename)
 
         # Step 3: Process document
-        document = (self.processing_service.process_document(storage_path))
-        document.metadata["storage_path"] = storage_path
+        document = self.processing_service.process_document(
+            storage_path
+        )
+
+# Add document management metadata
+        file_size = file.size
+
+        if file_size is None:
+            file_size = Path(storage_path).stat().st_size
+
+        document.metadata.update({
+            "storage_path": storage_path,
+            "original_filename": file.filename,
+            "file_size": file_size,
+            "created_at": datetime.now(
+                timezone.utc
+            ).isoformat(),
+        })
+
+# Step 4: Chunk document
+        chunks = self.chunking_service.chunk_document(
+            document
+        )
+
+# Store chunk count in document metadata
+        document.metadata["chunk_count"] = len(chunks)
         
         # Step 4: Chunk document
         chunks = (self.chunking_service.chunk_document(document))
