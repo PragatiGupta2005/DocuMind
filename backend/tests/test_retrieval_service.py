@@ -405,3 +405,111 @@ def test_retrieval_returns_no_results_when_all_are_below_threshold():
     )
 
     assert filtered_results == []
+
+
+def test_retrieval_removes_duplicate_point_ids():
+    results = [
+        create_search_result("point-A", 0.90),
+        create_search_result("point-B", 0.80),
+        create_search_result("point-A", 0.90),
+    ]
+
+    embedding_service = FakeEmbeddingService()
+    vector_store = FakeVectorStore(results=results)
+
+    retrieval_service = RetrievalService(
+        embedding_service=embedding_service,
+        vector_store=vector_store,
+    )
+
+    retrieved = retrieval_service.retrieve(
+        query="What is machine learning?",
+        top_k=5,
+    )
+
+    assert len(retrieved) == 2
+    assert [result.point_id for result in retrieved] == [
+        "point-A",
+        "point-B",
+    ]
+
+
+def test_retrieval_keeps_highest_scoring_duplicate():
+    results = [
+        create_search_result("point-A", 0.75),
+        create_search_result("point-B", 0.85),
+        create_search_result("point-A", 0.95),
+    ]
+
+    retrieval_service = RetrievalService(
+        embedding_service=FakeEmbeddingService(),
+        vector_store=FakeVectorStore(results=results),
+    )
+
+    retrieved = retrieval_service.retrieve(
+        query="What is machine learning?",
+        top_k=5,
+    )
+
+    assert len(retrieved) == 2
+    assert retrieved[0].point_id == "point-A"
+    assert retrieved[0].score == 0.95
+    assert retrieved[1].point_id == "point-B"
+    assert retrieved[1].score == 0.85
+
+
+def test_retrieval_preserves_distinct_points_with_identical_text():
+    results = [
+        create_search_result("point-A", 0.90),
+        create_search_result("point-B", 0.80),
+    ]
+
+    retrieval_service = RetrievalService(
+        embedding_service=FakeEmbeddingService(),
+        vector_store=FakeVectorStore(results=results),
+    )
+
+    retrieved = retrieval_service.retrieve(
+        query="What is machine learning?",
+        top_k=5,
+    )
+
+    assert len(retrieved) == 2
+    assert {
+        result.point_id for result in retrieved
+    } == {"point-A", "point-B"}
+
+
+def test_retrieval_deduplicates_before_returning_results():
+    results = [
+        create_search_result("point-A", 0.95),
+        create_search_result(
+            "point-A",
+            MIN_RELEVANCE_SCORE - 0.01,
+        ),
+        create_search_result("point-B", 0.80),
+        create_search_result(
+            "point-C",
+            MIN_RELEVANCE_SCORE - 0.10,
+        ),
+    ]
+
+    retrieval_service = RetrievalService(
+        embedding_service=FakeEmbeddingService(),
+        vector_store=FakeVectorStore(results=results),
+    )
+
+    retrieved = retrieval_service.retrieve(
+        query="What is machine learning?",
+        top_k=5,
+    )
+
+    assert [result.point_id for result in retrieved] == [
+        "point-A",
+        "point-B",
+    ]
+
+    assert all(
+        result.score >= MIN_RELEVANCE_SCORE
+        for result in retrieved
+    )

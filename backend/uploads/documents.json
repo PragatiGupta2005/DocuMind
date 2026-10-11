@@ -1434,5 +1434,37 @@
       "created_at": "2026-10-08T20:08:43.613353+00:00",
       "chunk_count": 1
     }
+  },
+  {
+    "document_id": "568e1663-98c4-4e84-82d4-6c167eb872be",
+    "filename": "568e1663-98c4-4e84-82d4-6c167eb872be.txt",
+    "file_type": "txt",
+    "text": "Artificial intelligence enables computers to perform tasks that normally require human intelligence. Machine learning is a branch of artificial intelligence that learns patterns from data.",
+    "metadata": {
+      "size_bytes": "188",
+      "created": "1791742276.2327797",
+      "modified": "1791742276.2327797",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-47\\test_query_retrieval_to_contex0\\568e1663-98c4-4e84-82d4-6c167eb872be.txt",
+      "original_filename": "ai_document.txt",
+      "file_size": 188,
+      "created_at": "2026-10-11T18:11:16.238902+00:00",
+      "chunk_count": 1
+    }
+  },
+  {
+    "document_id": "528494a5-ea7c-422b-b673-f734a8e60d45",
+    "filename": "528494a5-ea7c-422b-b673-f734a8e60d45.txt",
+    "file_type": "txt",
+    "text": "Machine learning is a branch of artificial intelligence. Machine learning systems learn patterns from data. These systems can use learned patterns to make predictions.",
+    "metadata": {
+      "size_bytes": "167",
+      "created": "1791742292.30276",
+      "modified": "1791742292.30276",
+      "storage_path": "C:\\Users\\USER\\AppData\\Local\\Temp\\pytest-of-USER\\pytest-47\\test_upload_index_query_end_to0\\528494a5-ea7c-422b-b673-f734a8e60d45.txt",
+      "original_filename": "machine_learning_rag.txt",
+      "file_size": 167,
+      "created_at": "2026-10-11T18:11:32.305393+00:00",
+      "chunk_count": 1
+    }
   }
 ]
